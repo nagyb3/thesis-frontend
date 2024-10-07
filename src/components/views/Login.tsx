@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import axios from "axios";
+import { loginToAccount } from "@/api-client/modules/authApiClient";
 
 export default function Login() {
   const [usernameInput, setUsernameInput] = useState("");
@@ -12,16 +12,10 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const result = await axios.post(
-        `${import.meta.env.VITE_API_URI}/auth/login`,
-        {
-          username: usernameInput,
-          password: passwordInput,
-        },
-        {
-          withCredentials: true,
-        }
-      );
+      const result = await loginToAccount({
+        username: usernameInput,
+        password: passwordInput,
+      });
 
       console.log({ result });
 

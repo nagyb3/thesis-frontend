@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import axios from "axios";
+import { registerNewAccount } from "@/api-client/modules/authApiClient";
 
 export default function Register() {
   const [usernameInput, setUsernameInput] = useState("");
@@ -17,14 +17,15 @@ export default function Register() {
       return;
     }
     try {
-      const result = await axios.post(
-        `${import.meta.env.VITE_API_URI}/auth/register`,
-        {
-          username: usernameInput,
-          password: passwordInput,
-        }
-      );
+      const result = await registerNewAccount({
+        username: usernameInput,
+        password: passwordInput,
+      });
       console.log({ result });
+
+      if (result.status === 201) {
+        window.location.href = "/login";
+      }
     } catch (error) {
       console.error({ error });
     }
