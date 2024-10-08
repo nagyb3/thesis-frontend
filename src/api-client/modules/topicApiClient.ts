@@ -12,3 +12,11 @@ export const createTopic = async ({
     description,
   });
 };
+
+export const getAllTopics = async () => {
+  return await apiClient.get("/topics");
+};
+
+export const getTopicById = async (topicId: string) => {
+  return await apiClient.get(`/topics/${topicId}`);
+};

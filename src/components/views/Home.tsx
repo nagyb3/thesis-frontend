@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { Card } from "../ui/card";
 import { AddTopicDialog } from "../dialogs/AddTopicDialog";
+import { TopicType } from "@/types/TopicType";
+import { getAllTopics } from "@/api-client/modules/topicApiClient";
 
 export default function Home() {
   const [allTopics, setAllTopics] = useState([]);
@@ -9,10 +10,9 @@ export default function Home() {
   useEffect(() => {
     const fetchTopics = async () => {
       try {
-        const result = await fetch(`${import.meta.env.VITE_API_URI}/topics`);
+        const result = await getAllTopics();
 
-        const data = await result.json();
-        setAllTopics(data);
+        setAllTopics(result.data);
       } catch (error) {
         console.error({ error });
       }
@@ -35,7 +35,7 @@ export default function Home() {
         </div>
         <div className="flex flex-col gap-y-2">
           {allTopics.length > 0 ? (
-            allTopics.map((topic: any) => (
+            allTopics.map((topic: TopicType) => (
               <Card
                 onClick={() => (window.location.href = `/topic/${topic?.id}`)}
                 className="p-4 cursor-pointer"

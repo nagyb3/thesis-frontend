@@ -1,4 +1,5 @@
 import { getProfile } from "@/api-client/modules/authApiClient";
+import { UserType } from "@/types/UserType";
 import {
   createContext,
   ReactNode,
@@ -7,17 +8,14 @@ import {
   useState,
 } from "react";
 
-type AuthContexType = {
-  profile: {
-    userId: string;
-  };
+type AuthContextType = {
+  profile: UserType | undefined;
 };
 
-const AuthContext = createContext<AuthContexType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [profile, setProfile] = useState<any | undefined>(undefined);
+  const [profile, setProfile] = useState<UserType | undefined>(undefined);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -41,4 +39,12 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useAuthContext = () => useContext(AuthContext);
+export const useAuthContext = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error(
+      "useAuthContext must be used within an AuthContextProvider"
+    );
+  }
+  return context;
+};

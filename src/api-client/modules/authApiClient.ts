@@ -1,7 +1,8 @@
+import { UserType } from "@/types/UserType";
 import { apiClient } from "../apiClient";
 
 export const getProfile = async () => {
-  return await apiClient.get("/auth/profile");
+  return await apiClient.get<UserType>("/auth/profile");
 };
 
 export const registerNewAccount = async ({
@@ -28,4 +29,8 @@ export const loginToAccount = async ({
     username,
     password,
   });
+};
+
+export const logoutFromAccount = async () => {
+  return await apiClient.post("/auth/logout");
 };
