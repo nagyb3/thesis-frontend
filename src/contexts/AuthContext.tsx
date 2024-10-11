@@ -22,7 +22,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
       try {
         const result = await getProfile();
 
-        console.log({ result });
         if (result.status === 200) {
           setProfile(result.data);
         }

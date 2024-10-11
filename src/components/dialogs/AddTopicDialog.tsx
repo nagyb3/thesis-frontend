@@ -21,8 +21,6 @@ export function AddTopicDialog({ children }: { children: React.ReactNode }) {
   const handleCreateNewTopic = async () => {
     const result = await createTopic({ name, description });
 
-    console.log({ result });
-
     if (result.status === 201) {
       console.log("Topic created successfully");
       window.location.href = "/topic/" + result.data.id;

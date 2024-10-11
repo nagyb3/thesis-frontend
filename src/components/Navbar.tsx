@@ -10,8 +10,6 @@ export default function Navbar() {
     if (result.status === 200) {
       window.location.href = "/login";
     }
-
-    console.log({ result });
   };
 
   const isCurrentPathAuthRoute =
@@ -37,13 +35,13 @@ export default function Navbar() {
                 <p>My Profile</p>
                 <UserRoundPen />
               </div>
-              <div
+              <button
                 onClick={() => handleLogout()}
                 className="flex gap-x-2 items-center cursor-pointer justify-between"
               >
                 <p className="text-red-500">Logout</p>
                 <LogOut color="red" />
-              </div>
+              </button>
             </PopoverContent>
           </Popover>
         </>

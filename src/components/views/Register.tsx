@@ -21,7 +21,6 @@ export default function Register() {
         username: usernameInput,
         password: passwordInput,
       });
-      console.log({ result });
 
       if (result.status === 201) {
         window.location.href = "/login";

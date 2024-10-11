@@ -1,3 +1,4 @@
+import { DiscussionType } from "./DiscussionType";
 import { UserType } from "./UserType";
 
 export type TopicType = {
@@ -6,4 +7,5 @@ export type TopicType = {
   description?: string;
   create_at: Date;
   moderators: UserType[];
+  discussions: DiscussionType[];
 };

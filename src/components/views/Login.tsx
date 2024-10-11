@@ -17,8 +17,6 @@ export default function Login() {
         password: passwordInput,
       });
 
-      console.log({ result });
-
       if (result.status === 200) {
         window.location.href = "/";
       }
