@@ -1,9 +1,12 @@
-import { getDiscussionById } from "@/api-client/modules/topicApiClient";
+import {
+  getDiscussionById,
+  getTopicById,
+} from "@/api-client/modules/topicApiClient";
 import { DiscussionType } from "@/types/DiscussionType";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Card } from "../ui/card";
-import RateDiscussion from "../discussion/RateDiscussion";
+import DiscussionFeedback from "../discussion/DiscussionFeedback";
 import CommentCard from "../discussion/CommentCard";
 import { CommentType } from "@/types/CommentType";
 import { Button } from "../ui/button";
@@ -14,6 +17,7 @@ import { ArrowLeft, Pencil, Trash } from "lucide-react";
 import { createComment } from "@/api-client/modules/commentApiClient";
 import DeleteDiscussionDialog from "../dialogs/DeleteDiscussionDialog";
 import EditDiscussionDialog from "../dialogs/EditDiscussionDialog";
+import { TopicType } from "@/types/TopicType";
 
 export default function Discussion() {
   const { discussionId, topicId } = useParams();
@@ -22,16 +26,28 @@ export default function Discussion() {
     undefined
   );
 
-  useEffect(() => {
-    const fetchDiscussion = async () => {
-      const result = await getDiscussionById(discussionId ?? "");
+  const [topic, setTopic] = useState<TopicType | undefined>(undefined);
 
-      if (result.status === 200) {
-        setDiscussion(result.data);
-      }
-    };
+  const fetchDiscussion = async () => {
+    const result = await getDiscussionById(discussionId ?? "");
+
+    if (result.status === 200) {
+      setDiscussion(result.data);
+    }
+  };
+
+  const fetchTopic = async () => {
+    const result = await getTopicById(topicId ?? "");
+
+    if (result.status === 200) {
+      setTopic(result.data);
+    }
+  };
+
+  useEffect(() => {
     fetchDiscussion();
-  }, [discussionId]);
+    fetchTopic();
+  }, [discussionId, topicId]);
 
   const handleSubmitComment = async () => {
     const result = await createComment({
@@ -72,7 +88,10 @@ export default function Discussion() {
         <div className="flex gap-x-2 items-center justify-between">
           <p className="font-semibold text-xl">{discussion?.title}</p>
           <div className="flex">
-            <RateDiscussion />
+            <DiscussionFeedback
+              discussion={discussion}
+              fetchDiscussion={fetchDiscussion}
+            />
             {isCurrentUserAuthorOfDiscussion && (
               <>
                 <EditDiscussionDialog discussion={discussion}>
@@ -140,7 +159,7 @@ export default function Discussion() {
                 new Date(a?.created_at).getTime()
             )
             .map((comment: CommentType) => (
-              <CommentCard comment={comment} key={comment?.id} />
+              <CommentCard comment={comment} key={comment?.id} topic={topic} />
             ))}
         </div>
       </Card>

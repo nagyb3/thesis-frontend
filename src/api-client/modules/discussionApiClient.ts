@@ -38,3 +38,18 @@ export const editDiscussion = async ({
     content,
   });
 };
+
+export const sendDiscussionFeedback = async ({
+  discussionId,
+  feedback,
+}: {
+  discussionId: string;
+  feedback: "like" | "dislike" | "none";
+}) => {
+  return await apiClient.post(
+    `/discussions/${discussionId}/discussion-feedback`,
+    {
+      feedback,
+    }
+  );
+};

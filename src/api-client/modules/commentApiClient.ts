@@ -13,3 +13,7 @@ export const createComment = async ({
     discussionId,
   });
 };
+
+export const deleteComment = async (commentId: string) => {
+  return await apiClient.delete(`/comments/${commentId}`);
+};

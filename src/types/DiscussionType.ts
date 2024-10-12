@@ -1,4 +1,5 @@
 import { CommentType } from "./CommentType";
+import { DiscussionFeedbackType } from "./DiscussionFeedbackType";
 import { TopicType } from "./TopicType";
 import { UserType } from "./UserType";
 
@@ -10,4 +11,5 @@ export type DiscussionType = {
   author: UserType;
   topic: TopicType;
   comments: CommentType[];
+  discussionFeedback: DiscussionFeedbackType[];
 };

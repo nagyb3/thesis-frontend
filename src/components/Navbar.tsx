@@ -2,6 +2,7 @@ import { House, LogOut, User, UserRoundPen } from "lucide-react";
 import { Popover, PopoverContent } from "./ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { logoutFromAccount } from "@/api-client/modules/authApiClient";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export default function Navbar() {
   const handleLogout = async () => {
@@ -15,6 +16,8 @@ export default function Navbar() {
   const isCurrentPathAuthRoute =
     window.location.pathname === "/login" ||
     window.location.pathname === "/register";
+
+  const { profile } = useAuthContext();
 
   return (
     <div className="bg-slate-200 h-[50px] px-12 flex justify-between items-center">
@@ -31,6 +34,8 @@ export default function Navbar() {
               </div>
             </PopoverTrigger>
             <PopoverContent className="w-fit mr-12 flex flex-col gap-y-4">
+              <p className="font-bold">@{profile?.username}</p>
+
               <div
                 onClick={() => (window.location.href = "/your-profile")}
                 className="flex gap-x-2 items-center cursor-pointer justify-between"

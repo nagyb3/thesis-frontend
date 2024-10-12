@@ -30,7 +30,7 @@ export default function Home() {
             Explore that topics you can learn more about!
           </p>
           <AddTopicDialog>
-            <p className="hover:underline mt-4 cursor-pointer">
+            <p className="hover:underline mt-4 cursor-pointer w-fit">
               Don't see what you want? Create a new topic!
             </p>
           </AddTopicDialog>

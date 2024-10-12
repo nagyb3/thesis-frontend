@@ -32,6 +32,8 @@ export default function Topic() {
     fetchTopic();
   }, [topicId]);
 
+  console.log({ topic });
+
   return (
     <div className="h-[calc(100vh-50px)] bg-slate-50">
       {topic && (
