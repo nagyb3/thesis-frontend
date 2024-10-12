@@ -8,9 +8,13 @@ import LearningPathsTab from "../topic/tabs/LearningPathsTab";
 import TopicHeader from "../topic/TopicHeader";
 import LearningResourcesTab from "../topic/tabs/LearningResourcesTab";
 import { Book, Send, Waypoints } from "lucide-react";
+import { DiscussionType } from "@/types/DiscussionType";
 
 export default function Topic() {
   const [topic, setTopic] = useState<TopicType | undefined>(undefined);
+  const [discussions, setDiscussions] = useState<DiscussionType[] | undefined>(
+    undefined
+  );
 
   const { topicId } = useParams();
 
@@ -23,6 +27,7 @@ export default function Topic() {
 
         if (result.status === 200) {
           setTopic(result.data);
+          setDiscussions(result.data.discussions);
         }
       } catch (error) {
         console.error({ error });
@@ -31,8 +36,6 @@ export default function Topic() {
 
     fetchTopic();
   }, [topicId]);
-
-  console.log({ topic });
 
   return (
     <div className="h-[calc(100vh-50px)] bg-slate-50">
@@ -65,7 +68,11 @@ export default function Topic() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="discussions">
-              <DiscussionsTab topic={topic} />
+              <DiscussionsTab
+                topic={topic}
+                discussions={discussions}
+                setDiscussions={setDiscussions}
+              />
             </TabsContent>
             <TabsContent value="learning-paths">
               <LearningPathsTab />

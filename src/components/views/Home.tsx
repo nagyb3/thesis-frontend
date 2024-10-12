@@ -2,24 +2,32 @@ import { useEffect, useState } from "react";
 import { Card } from "../ui/card";
 import { AddTopicDialog } from "../dialogs/AddTopicDialog";
 import { TopicType } from "@/types/TopicType";
-import { getAllTopics } from "@/api-client/modules/topicApiClient";
+import { getTopics } from "@/api-client/modules/topicApiClient";
+import { Input } from "../ui/input";
 
 export default function Home() {
   const [allTopics, setAllTopics] = useState([]);
+  const fetchTopics = async (name: string = "") => {
+    try {
+      const result = await getTopics(name);
+
+      setAllTopics(result.data);
+    } catch (error) {
+      console.error({ error });
+    }
+  };
 
   useEffect(() => {
-    const fetchTopics = async () => {
-      try {
-        const result = await getAllTopics();
-
-        setAllTopics(result.data);
-      } catch (error) {
-        console.error({ error });
-      }
-    };
-
     fetchTopics();
   }, []);
+
+  const handleTopicSearchInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newSearchInput = e.target.value;
+
+    fetchTopics(newSearchInput);
+  };
 
   return (
     <div className="min-h-[calc(100vh-50px)] bg-slate-50 flex flex-col items-center pb-8 px-8">
@@ -35,6 +43,11 @@ export default function Home() {
             </p>
           </AddTopicDialog>
         </div>
+        <Input
+          className="w-[400px] text-sm mb-8"
+          placeholder="Search for name of topic..."
+          onChange={handleTopicSearchInputChange}
+        />
         {allTopics.length > 0 ? (
           <div className="grid grid-cols-2 gap-4">
             {allTopics.map((topic: TopicType) => (

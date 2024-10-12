@@ -7,8 +7,31 @@ import {
   CardTitle,
 } from "../../ui/card";
 import { Button } from "../../ui/button";
+import { Input } from "@/components/ui/input";
+import { DiscussionType } from "@/types/DiscussionType";
+import { getDiscussionsForTopic } from "@/api-client/modules/topicApiClient";
+import { Dispatch, SetStateAction } from "react";
 
-export default function DiscussionsTab({ topic }: { topic: TopicType }) {
+export default function DiscussionsTab({
+  topic,
+  discussions,
+  setDiscussions,
+}: {
+  topic: TopicType | undefined;
+  discussions: DiscussionType[] | undefined;
+  setDiscussions: Dispatch<SetStateAction<DiscussionType[] | undefined>>;
+}) {
+  const fetchDiscussions = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const result = await getDiscussionsForTopic(
+      topic?.id ?? "",
+      e.target.value
+    );
+
+    if (result.status === 200) {
+      setDiscussions(result.data);
+    }
+  };
+
   return (
     <Card className="w-[900px]">
       <CardHeader>
@@ -30,8 +53,13 @@ export default function DiscussionsTab({ topic }: { topic: TopicType }) {
         </div>
       </CardHeader>
       <CardContent className="space-y-2">
-        {topic?.discussions.length > 0 ? (
-          topic?.discussions.map((discussion) => (
+        <Input
+          className="w-[400px] text-sm mb-8"
+          placeholder="Search for discussion..."
+          onChange={(e) => fetchDiscussions(e)}
+        />
+        {discussions ? (
+          discussions?.map((discussion: DiscussionType) => (
             <Card
               key={discussion.id}
               className="p-4 cursor-pointer"
