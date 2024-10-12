@@ -31,8 +31,11 @@ export default function Navbar() {
               </div>
             </PopoverTrigger>
             <PopoverContent className="w-fit mr-12 flex flex-col gap-y-4">
-              <div className="flex gap-x-2 items-center cursor-pointer justify-between">
-                <p>My Profile</p>
+              <div
+                onClick={() => (window.location.href = "/your-profile")}
+                className="flex gap-x-2 items-center cursor-pointer justify-between"
+              >
+                <p>Your profile</p>
                 <UserRoundPen />
               </div>
               <button

@@ -1,6 +1,7 @@
 import { UserType } from "@/types/UserType";
 import { apiClient } from "../apiClient";
 
+// fetches the profile of the user who is currently logged in
 export const getProfile = async () => {
   return await apiClient.get<UserType>("/auth/profile");
 };

@@ -7,6 +7,8 @@ import Topic from "./components/views/Topic";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import CreateDiscussion from "./components/views/CreateDiscussion";
 import Discussion from "./components/views/Discussion";
+import UserProfile from "./components/views/UserProfile";
+import YourProfile from "./components/views/YourProfile";
 
 export default function App() {
   return (
@@ -27,6 +29,8 @@ export default function App() {
               path="/topic/:topicId/discussion/:discussionId"
               element={<Discussion />}
             />
+            <Route path="user/:userId" element={<UserProfile />} />
+            <Route path="/your-profile" element={<YourProfile />} />
           </Routes>
         </Router>
       </div>

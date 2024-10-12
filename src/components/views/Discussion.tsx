@@ -97,7 +97,16 @@ export default function Discussion() {
         </div>
         <p className="pb-4 ml-8">
           Author:{" "}
-          <span className="font-bold">{discussion?.author?.username}</span>
+          <a
+            href={
+              discussion?.author?.id === profile?.id
+                ? "/your-profile"
+                : "/user/" + discussion?.author?.id
+            }
+            className="font-bold hover:underline"
+          >
+            @{discussion?.author?.username}
+          </a>
         </p>
         <p>{discussion?.content}</p>
       </Card>
