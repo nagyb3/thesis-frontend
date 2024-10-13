@@ -8,4 +8,5 @@ export type TopicType = {
   create_at: Date;
   moderators: UserType[];
   discussions: DiscussionType[];
+  learningResources: string[];
 };

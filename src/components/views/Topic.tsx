@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { getTopicById } from "@/api-client/modules/topicApiClient";
@@ -9,6 +9,8 @@ import TopicHeader from "../topic/TopicHeader";
 import LearningResourcesTab from "../topic/tabs/LearningResourcesTab";
 import { Book, Send, Waypoints } from "lucide-react";
 import { DiscussionType } from "@/types/DiscussionType";
+import { UserType } from "@/types/UserType";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export default function Topic() {
   const [topic, setTopic] = useState<TopicType | undefined>(undefined);
@@ -17,6 +19,8 @@ export default function Topic() {
   );
 
   const { topicId } = useParams();
+
+  const { profile } = useAuthContext();
 
   useEffect(() => {
     const fetchTopic = async () => {
@@ -37,11 +41,22 @@ export default function Topic() {
     fetchTopic();
   }, [topicId]);
 
+  const isCurrentUserModeratorOfTopic = useMemo(
+    () =>
+      topic?.moderators?.some(
+        (moderator: UserType) => moderator.id === profile?.id
+      ) ?? false,
+    [profile, topic?.moderators]
+  );
+
   return (
     <div className="h-[calc(100vh-50px)] bg-slate-50">
       {topic && (
         <div className="flex flex-col items-center">
-          <TopicHeader topic={topic} />
+          <TopicHeader
+            topic={topic}
+            isCurrentUserModeratorOfTopic={isCurrentUserModeratorOfTopic}
+          />
 
           <Tabs
             defaultValue="discussions"
@@ -78,7 +93,10 @@ export default function Topic() {
               <LearningPathsTab />
             </TabsContent>
             <TabsContent value="learning-resources">
-              <LearningResourcesTab />
+              <LearningResourcesTab
+                isCurrentUserModeratorOfTopic={isCurrentUserModeratorOfTopic}
+                topic={topic}
+              />
             </TabsContent>
           </Tabs>
         </div>

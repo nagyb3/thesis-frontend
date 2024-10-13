@@ -29,14 +29,17 @@ export const editTopic = async ({
   id,
   name,
   description,
+  learningResources,
 }: {
   id: string;
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
+  learningResources?: string[];
 }) => {
   return await apiClient.put(`/topics/${id}`, {
     name,
     description,
+    learningResources,
   });
 };
 
