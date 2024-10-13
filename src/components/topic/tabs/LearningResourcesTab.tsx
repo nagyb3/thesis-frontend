@@ -77,13 +77,14 @@ export default function LearningResourcesTab({
                   />
                   <Button
                     variant="destructive"
-                    onClick={() =>
+                    onClick={(e) => {
+                      e.preventDefault();
                       setLearningResources((prev) => {
                         const newResources = [...prev];
                         newResources.splice(index, 1);
                         return newResources;
-                      })
-                    }
+                      });
+                    }}
                   >
                     <CircleX />
                   </Button>

@@ -58,7 +58,7 @@ export default function DiscussionsTab({
           placeholder="Search for discussion..."
           onChange={(e) => fetchDiscussions(e)}
         />
-        {discussions ? (
+        {discussions && discussions.length > 0 ? (
           discussions?.map((discussion: DiscussionType) => (
             <Card
               key={discussion.id}
