@@ -30,7 +30,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-50px)] bg-slate-50 flex flex-col items-center pb-8 px-8">
+    <div className="min-h-[calc(100vh-50px)] bg-neutral-50 flex flex-col items-center pb-8 px-8">
       <div className="flex flex-col max-w-[1100px] w-full">
         <div className="flex flex-col gap-y-2 m-8">
           <p className="text-4xl font-bold">Topics</p>

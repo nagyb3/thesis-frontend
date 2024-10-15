@@ -12,4 +12,5 @@ export type DiscussionType = {
   topic: TopicType;
   comments: CommentType[];
   discussionFeedback: DiscussionFeedbackType[];
+  image?: string;
 };

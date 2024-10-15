@@ -26,7 +26,7 @@ export default function Login() {
   };
 
   return (
-    <div className="bg-slate-50 flex justify-center items-center h-[calc(100vh-50px)] px-4">
+    <div className="bg-neutral-50 flex justify-center items-center h-[calc(100vh-50px)] px-4">
       <form
         onSubmit={(e) => handleSubmit(e)}
         className="flex flex-col gap-y-4 items-center bg-white border border-slate-200 rounded px-4 py-8 min-w-[500px] h-fit"

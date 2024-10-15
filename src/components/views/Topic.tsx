@@ -50,7 +50,7 @@ export default function Topic() {
   );
 
   return (
-    <div className="h-[calc(100vh-50px)] bg-slate-50">
+    <div className="h-[calc(100vh-50px)] bg-neutral-50">
       {topic && (
         <div className="flex flex-col items-center">
           <TopicHeader

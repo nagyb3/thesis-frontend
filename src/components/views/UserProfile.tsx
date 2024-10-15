@@ -44,7 +44,7 @@ export default function UserProfile() {
   }, [userId]);
 
   return (
-    <div className="flex flex-col gap-y-2 bg-slate-50 items-center min-h-[calc(100vh-50px)] p-8">
+    <div className="flex flex-col gap-y-2 bg-neutral-50 items-center min-h-[calc(100vh-50px)] p-8">
       <Card className="w-[900px] px-8 py-8 flex flex-col gap-y-2">
         <div className="flex gap-x-4 items-end">
           <div className="bg-primary p-2 rounded-full w-fit h-fit">

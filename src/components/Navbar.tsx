@@ -20,7 +20,7 @@ export default function Navbar() {
   const { profile } = useAuthContext();
 
   return (
-    <div className="bg-slate-200 h-[50px] px-12 flex justify-between items-center">
+    <div className="bg-neutral-300 h-[50px] px-12 flex justify-between items-center">
       {!isCurrentPathAuthRoute && (
         <>
           <a href="/" className="cursor-pointer">

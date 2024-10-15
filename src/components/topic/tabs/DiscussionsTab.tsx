@@ -62,13 +62,22 @@ export default function DiscussionsTab({
           discussions?.map((discussion: DiscussionType) => (
             <Card
               key={discussion.id}
-              className="p-4 cursor-pointer"
+              className="p-4 cursor-pointer flex flex-col items-center"
               onClick={() =>
                 (window.location.href =
                   "/topic/" + topic?.id + "/discussion/" + discussion.id)
               }
             >
-              {discussion.title}
+              <p className="self-start text-xl font-semibold">
+                {discussion.title}
+              </p>
+              {discussion?.image && (
+                <img
+                  src={discussion?.image}
+                  alt=""
+                  className="h-[200px] max-w-full"
+                />
+              )}
             </Card>
           ))
         ) : (

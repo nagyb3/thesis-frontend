@@ -77,7 +77,7 @@ export default function Discussion() {
     discussion?.author?.id === profile?.id;
 
   return (
-    <div className="min-h-[calc(100vh-50px)] bg-slate-50 flex flex-col items-center py-8 gap-y-4">
+    <div className="min-h-[calc(100vh-50px)] bg-neutral-50 flex flex-col items-center py-8 gap-y-4">
       <a href={"/topic/" + topicId} className="self-start ml-16">
         <div className="flex gap-x-2 items-center hover:underline">
           <ArrowLeft size={20} />
@@ -128,6 +128,15 @@ export default function Discussion() {
           </a>
         </p>
         <p>{discussion?.content}</p>
+        {discussion?.image && (
+          <div className="flex justify-center">
+            <img
+              src={discussion.image}
+              className="max-h-[300px] max-w-full self-center"
+              alt="image for the discussion"
+            />
+          </div>
+        )}
       </Card>
       <Card className="py-4 px-8 w-[900px] flex flex-col gap-y-4">
         <form
