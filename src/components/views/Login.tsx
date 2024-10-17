@@ -3,10 +3,12 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { loginToAccount } from "@/api-client/modules/authApiClient";
+import { AxiosError } from "axios";
 
 export default function Login() {
   const [usernameInput, setUsernameInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
+  const [errorState, setErrorState] = useState<string | undefined>(undefined);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,10 +19,14 @@ export default function Login() {
         password: passwordInput,
       });
 
+      console.log({ result });
       if (result.status === 200) {
         window.location.href = "/";
       }
     } catch (error) {
+      setErrorState(
+        (error as AxiosError<{ message: string }>)?.response?.data?.message
+      );
       console.error({ error });
     }
   };
@@ -49,6 +55,7 @@ export default function Login() {
             required
           />
         </div>
+        {errorState && <p className="text-red-500">{errorState}</p>}
         <Button>Submit</Button>
         <a href="/register" className="self-end hover:underline text-sm">
           Don't have an account yet? Register!
