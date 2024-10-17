@@ -9,6 +9,7 @@ import CreateDiscussion from "./components/views/CreateDiscussion";
 import Discussion from "./components/views/Discussion";
 import UserProfile from "./components/views/UserProfile";
 import YourProfile from "./components/views/YourProfile";
+import PrivateMessage from "./components/views/PrivateMessage";
 
 export default function App() {
   return (
@@ -30,6 +31,10 @@ export default function App() {
               element={<Discussion />}
             />
             <Route path="user/:userId" element={<UserProfile />} />
+            <Route
+              path="user/:userId/private-message/:privateMessageRoomId"
+              element={<PrivateMessage />}
+            />
             <Route path="/your-profile" element={<YourProfile />} />
           </Routes>
         </Router>

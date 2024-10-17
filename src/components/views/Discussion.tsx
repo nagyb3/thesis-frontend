@@ -13,11 +13,12 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "@radix-ui/react-label";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { ArrowLeft, Pencil, Trash } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
 import { createComment } from "@/api-client/modules/commentApiClient";
 import DeleteDiscussionDialog from "../dialogs/DeleteDiscussionDialog";
 import EditDiscussionDialog from "../dialogs/EditDiscussionDialog";
 import { TopicType } from "@/types/TopicType";
+import BackButtonWithLink from "../BackButtonWithLink";
 
 export default function Discussion() {
   const { discussionId, topicId } = useParams();
@@ -78,12 +79,7 @@ export default function Discussion() {
 
   return (
     <div className="min-h-[calc(100vh-50px)] bg-neutral-50 flex flex-col items-center py-8 gap-y-4">
-      <a href={"/topic/" + topicId} className="self-start ml-16">
-        <div className="flex gap-x-2 items-center hover:underline">
-          <ArrowLeft size={20} />
-          Back
-        </div>
-      </a>
+      <BackButtonWithLink backLink={"/topic/" + topicId} />
       <Card className="py-4 px-8 w-[900px]">
         <div className="flex gap-x-2 items-center justify-between">
           <p className="font-semibold text-xl">{discussion?.title}</p>

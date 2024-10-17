@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { Card } from "../ui/card";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { UserType } from "@/types/UserType";
 import { getUserById } from "@/api-client/modules/userApiClient";
 import { User } from "lucide-react";
@@ -8,6 +8,7 @@ import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import UserProfileAchievements from "../user-profile/UserProfileAchievements";
 import UserProfileRating from "../user-profile/UserProfileRating";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export default function UserProfile() {
   const { userId } = useParams();
@@ -43,6 +44,12 @@ export default function UserProfile() {
     fetchUserProfile();
   }, [userId]);
 
+  const { profile } = useAuthContext();
+
+  const privateMessageRoomId = useMemo(() => {
+    return [profile?.id, userId].sort().join("_") + "_pm";
+  }, [profile, userId]);
+
   return (
     <div className="flex flex-col gap-y-2 bg-neutral-50 items-center min-h-[calc(100vh-50px)] p-8">
       <Card className="w-[900px] px-8 py-8 flex flex-col gap-y-2">
@@ -56,7 +63,14 @@ export default function UserProfile() {
               <p className="font-semibold text-3xl">@{userProfile?.username}</p>
             </div>
           </div>
-          <Button color="blue" className="ml-auto">
+          <Button
+            color="blue"
+            className="ml-auto"
+            onClick={() =>
+              (window.location.href =
+                "/user/" + userId + "/private-message/" + privateMessageRoomId)
+            }
+          >
             Send message
           </Button>
         </div>

@@ -5,7 +5,8 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { useParams } from "react-router-dom";
 import { createDiscussion } from "@/api-client/modules/discussionApiClient";
-import { ArrowLeft, ImageUp, Trash2 } from "lucide-react";
+import { ImageUp, Trash2 } from "lucide-react";
+import BackButtonWithLink from "../BackButtonWithLink";
 
 export default function CreateDiscussion() {
   const [title, setTitle] = useState("");
@@ -76,12 +77,7 @@ export default function CreateDiscussion() {
 
   return (
     <div className="min-h-[calc(100vh-50px)] bg-neutral-100 flex flex-col items-center gap-y-4 py-8">
-      <a href={"/topic/" + topicId} className="self-start ml-16">
-        <div className="flex gap-x-2 items-center hover:underline">
-          <ArrowLeft size={20} />
-          Back
-        </div>
-      </a>
+      <BackButtonWithLink backLink={"/topic/" + topicId} />
       <p className="font-semibold text-xl">Create New Discussion:</p>
       <div className="flex flex-col items-center w-[500px] gap-y-6">
         <div className="flex flex-col gap-y-2 w-full">
