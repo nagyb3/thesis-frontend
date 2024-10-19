@@ -10,6 +10,7 @@ import Discussion from "./components/views/Discussion";
 import UserProfile from "./components/views/UserProfile";
 import YourProfile from "./components/views/YourProfile";
 import PrivateMessage from "./components/views/PrivateMessage";
+import VideoChat from "./components/views/VideoChat";
 
 export default function App() {
   return (
@@ -34,6 +35,10 @@ export default function App() {
             <Route
               path="user/:userId/private-message/:privateMessageRoomId"
               element={<PrivateMessage />}
+            />
+            <Route
+              path="user/:userId/video-chat/:videoChatRoomId"
+              element={<VideoChat />}
             />
             <Route path="/your-profile" element={<YourProfile />} />
           </Routes>
