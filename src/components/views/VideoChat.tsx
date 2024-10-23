@@ -78,7 +78,14 @@ const VideoChat: React.FC = () => {
 
   const setupPeerConnection = (stream: MediaStream) => {
     peerConnectionRef.current = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+      iceServers: [
+        { urls: "stun:stun.l.google.com:19302" },
+        {
+          urls: `turn:${import.meta.env.VITE_TURN_SERVER_IP}`,
+          username: import.meta.env.VITE_TURN_SERVER_USERNAME,
+          credential: import.meta.env.VITE_TURN_SERVER_PASSWORD,
+        },
+      ],
     });
 
     stream.getTracks().forEach((track) => {
