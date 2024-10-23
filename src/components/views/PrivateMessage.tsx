@@ -63,7 +63,7 @@ export default function PrivateMessage() {
     fetchOtherUserProfile();
     fetchConversation();
     if (privateMessageRoomId) {
-      const socket = io(process.env.VITE_API_URI, {
+      const socket = io(import.meta.env.VITE_API_URI, {
         withCredentials: true,
       });
       socket.on("connect", () => {

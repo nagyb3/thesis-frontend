@@ -33,7 +33,7 @@ const VideoChat: React.FC = () => {
   }, [userIdParam]);
 
   useEffect(() => {
-    socketRef.current = io(process.env.VITE_API_URI, {
+    socketRef.current = io(import.meta.env.VITE_API_URI, {
       withCredentials: true,
     });
 
