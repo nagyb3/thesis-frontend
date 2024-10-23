@@ -10,6 +10,7 @@ import {
 
 type AuthContextType = {
   profile: UserType | undefined;
+  fetchProfile: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,24 +18,26 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [profile, setProfile] = useState<UserType | undefined>(undefined);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const result = await getProfile();
+  const fetchProfile = async () => {
+    try {
+      const result = await getProfile();
 
-        if (result.status === 200) {
-          setProfile(result.data);
-        }
-      } catch (error) {
-        console.error({ error });
+      if (result.status === 200) {
+        setProfile(result.data);
       }
-    };
+    } catch (error) {
+      console.error({ error });
+    }
+  };
 
+  useEffect(() => {
     fetchProfile();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ profile }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ profile, fetchProfile }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 

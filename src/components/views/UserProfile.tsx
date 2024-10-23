@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import UserProfileAchievements from "../user-profile/UserProfileAchievements";
 import UserProfileRating from "../user-profile/UserProfileRating";
 import { useAuthContext } from "@/contexts/AuthContext";
+import UserProfileTrackedTime from "../user-profile/UserProfileTrackedTime";
 
 export default function UserProfile() {
   const { userId } = useParams();
@@ -31,8 +32,6 @@ export default function UserProfile() {
       if (!userId) return;
 
       const result = await getUserById(userId);
-
-      console.log(result);
 
       if (result.status === 200) {
         setUserProfile(result.data.user);
@@ -76,6 +75,8 @@ export default function UserProfile() {
         </div>
         <Separator className="my-6" />
         <UserProfileAchievements />
+        <Separator className="my-6" />
+        <UserProfileTrackedTime userId={userId} isMyProfile={false} />
         <Separator className="my-6" />
         <UserProfileRating
           score={score}

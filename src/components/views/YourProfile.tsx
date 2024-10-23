@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import UserProfileAchievements from "../user-profile/UserProfileAchievements";
 import { getUserById } from "@/api-client/modules/userApiClient";
 import UserProfileRating from "../user-profile/UserProfileRating";
+import UserProfileTrackedTime from "../user-profile/UserProfileTrackedTime";
 
 export default function MyProfile() {
   const { profile } = useAuthContext();
@@ -46,6 +47,8 @@ export default function MyProfile() {
         </div>
         <Separator className="my-4" />
         <UserProfileAchievements />
+        <Separator className="my-4" />
+        <UserProfileTrackedTime userId={profile?.id} isMyProfile={true} />
         <Separator className="my-4" />
         <UserProfileRating
           isYourProfile={true}
