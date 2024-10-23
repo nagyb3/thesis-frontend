@@ -49,6 +49,10 @@ export default function UserProfile() {
     return [profile?.id, userId].sort().join("_") + "_pm";
   }, [profile, userId]);
 
+  const videoChatRoomId = useMemo(() => {
+    return [profile?.id, userId].sort().join("_") + "_vc";
+  }, [profile, userId]);
+
   return (
     <div className="flex flex-col gap-y-2 bg-neutral-50 items-center min-h-[calc(100vh-50px)] p-8">
       <Card className="w-[900px] px-8 py-8 flex flex-col gap-y-2">
@@ -62,16 +66,30 @@ export default function UserProfile() {
               <p className="font-semibold text-3xl">@{userProfile?.username}</p>
             </div>
           </div>
-          <Button
-            color="blue"
-            className="ml-auto"
-            onClick={() =>
-              (window.location.href =
-                "/user/" + userId + "/private-message/" + privateMessageRoomId)
-            }
-          >
-            Send message
-          </Button>
+          <div className="flex flex-col gap-y-2 ml-auto">
+            <Button
+              variant="outline"
+              color="blue"
+              onClick={() =>
+                (window.location.href =
+                  "/user/" + userId + "/video-chat/" + videoChatRoomId)
+              }
+            >
+              Enter video consultation
+            </Button>
+            <Button
+              color="blue"
+              onClick={() =>
+                (window.location.href =
+                  "/user/" +
+                  userId +
+                  "/private-message/" +
+                  privateMessageRoomId)
+              }
+            >
+              Send message
+            </Button>
+          </div>
         </div>
         <Separator className="my-6" />
         <UserProfileAchievements />
