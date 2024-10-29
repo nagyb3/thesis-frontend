@@ -13,7 +13,7 @@ export default function PrivateMessageBubble({
       className={`p-2 rounded-xl w-fit ${
         privateMessage.sender?.id === profile?.id
           ? "bg-blue-200 self-end"
-          : "bg-gray-200"
+          : "bg-default-200"
       }`}
     >
       {privateMessage?.message}

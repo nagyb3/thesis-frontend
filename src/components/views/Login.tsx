@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { loginToAccount } from "@/api-client/modules/authApiClient";
 import { AxiosError } from "axios";
+import { Input } from "@nextui-org/input";
+import { Button, Card, CardBody } from "@nextui-org/react";
 
 export default function Login() {
   const [usernameInput, setUsernameInput] = useState("");
@@ -32,35 +31,43 @@ export default function Login() {
   };
 
   return (
-    <div className="bg-neutral-50 flex justify-center items-center h-[calc(100vh-50px)] px-4">
-      <form
-        onSubmit={(e) => handleSubmit(e)}
-        className="flex flex-col gap-y-4 items-center bg-white border border-slate-200 rounded px-4 py-8 min-w-[500px] h-fit"
-      >
-        <p className="text-xl font-semibold">Login</p>
-        <div className="flex flex-col gap-y-2 w-full max-w-[300px]">
-          <Label>Username</Label>
-          <Input
-            value={usernameInput}
-            onChange={(e) => setUsernameInput(e.target.value)}
-            required
-          />
-        </div>
-        <div className="flex flex-col gap-y-2 w-full max-w-[300px]">
-          <Label>Password</Label>
-          <Input
-            value={passwordInput}
-            onChange={(e) => setPasswordInput(e.target.value)}
-            type="password"
-            required
-          />
-        </div>
-        {errorState && <p className="text-red-500">{errorState}</p>}
-        <Button>Submit</Button>
-        <a href="/register" className="self-end hover:underline text-sm">
-          Don't have an account yet? Register!
-        </a>
-      </form>
+    <div className="bg-background flex justify-center items-center h-[calc(100vh-50px)] px-4">
+      <Card>
+        <CardBody>
+          <form
+            onSubmit={(e) => handleSubmit(e)}
+            className="flex flex-col gap-y-6 items-center px-4 py-8 min-w-[500px] h-fit"
+          >
+            <p className="text-3xl font-semibold">Login</p>
+            <div className="flex flex-col gap-y-2 w-full max-w-[300px]">
+              <Input
+                label="Username"
+                variant="faded"
+                value={usernameInput}
+                onChange={(e) => setUsernameInput(e.target.value)}
+                isRequired
+              />
+            </div>
+            <div className="flex flex-col gap-y-2 w-full max-w-[300px]">
+              <Input
+                label="Password"
+                variant="faded"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                type="password"
+                isRequired
+              />
+            </div>
+            {errorState && <p className="text-red-500">{errorState}</p>}
+            <Button color="primary" type="submit" className="font-bold">
+              Submit
+            </Button>
+            <a href="/register" className="self-end hover:underline text-sm">
+              Don't have an account yet? Register!
+            </a>
+          </form>
+        </CardBody>
+      </Card>
     </div>
   );
 }

@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { io } from "socket.io-client";
-import { Card } from "../ui/card";
 import { UserType } from "@/types/UserType";
 import { getUserById } from "@/api-client/modules/userApiClient";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Button } from "../ui/button";
 import {
   createPrivateMessage,
   getConversation,
 } from "@/api-client/modules/privateMessageApiClient";
 import { PrivateMessageType } from "@/types/PrivateMessageType";
 import PrivateMessageBubble from "../private-messages/PrivateMessageBubble";
+import { Button, Card, Input } from "@nextui-org/react";
 
 export default function PrivateMessage() {
   const { privateMessageRoomId, userId } = useParams();
@@ -97,7 +94,7 @@ export default function PrivateMessage() {
     <div className="min-h-[calc(100vh-50px)] max-h-[calc(100vh-50px)] bg-gray-50 p-4 flex justify-center">
       {!rejectedFromRoom ? (
         <Card className="flex flex-col justify-start max-w-[900px] w-full">
-          <div className="px-8 py-6 border-b border-gray-400">
+          <div className="px-8 py-6 border-b border-default-300">
             <p className="text-2xl font-semibold">
               {otherUserProfile?.username}
             </p>
@@ -115,17 +112,20 @@ export default function PrivateMessage() {
           </div>
           <form
             onSubmit={(e) => handleSubmit(e)}
-            className="mt-auto p-4 flex gap-x-4 justify-between items-center border-t border-gray-400"
+            className="mt-auto p-4 flex gap-x-4 justify-between items-center border-t border-default-300"
           >
             <div className="w-full">
-              <Label htmlFor="message">Message</Label>
               <Input
+                variant="faded"
+                label="Message"
                 value={newMessageInput}
                 onChange={(e) => setNewMessageInput(e.target.value)}
                 id="message"
               />
             </div>
-            <Button className="self-end">Send</Button>
+            <Button color="primary" className="self-end">
+              Send
+            </Button>
           </form>
         </Card>
       ) : (

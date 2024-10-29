@@ -1,9 +1,9 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
 import { DiscussionType } from "@/types/DiscussionType";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { sendDiscussionFeedback } from "@/api-client/modules/discussionApiClient";
+import { Button } from "@nextui-org/react";
 
 export default function DiscussionFeedback({
   discussion,
@@ -61,7 +61,7 @@ export default function DiscussionFeedback({
     <div className="flex gap-x-2">
       <Button
         className="p-2 h-fit flex gap-x-2"
-        variant="outline"
+        variant="faded"
         onClick={() => {
           if (isOn) {
             handleClick("none");
@@ -77,7 +77,7 @@ export default function DiscussionFeedback({
       </Button>
       <Button
         className="p-2 h-fit flex gap-x-2"
-        variant="outline"
+        variant="faded"
         onClick={() => {
           if (isDown) {
             handleClick("none");

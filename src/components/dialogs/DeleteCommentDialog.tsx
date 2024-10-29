@@ -1,21 +1,21 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
 import { CommentType } from "@/types/CommentType";
 import { deleteComment } from "@/api-client/modules/commentApiClient";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+} from "@nextui-org/react";
 
 export default function DeleteCommentDialog({
-  children,
   comment,
+  onOpenChange,
+  isOpen,
 }: {
-  children: React.ReactNode;
   comment: CommentType | undefined;
+  onOpenChange: () => void;
+  isOpen: boolean;
 }) {
   const handleDeleteComment = async () => {
     const result = await deleteComment(comment?.id ?? "");
@@ -26,22 +26,29 @@ export default function DeleteCommentDialog({
   };
 
   return (
-    <Dialog>
-      <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Delete Comment?</DialogTitle>
-          <DialogDescription>
-            Are you sure you want to delete this comment? This action cannot be
-            undone.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex justify-end">
-          <Button onClick={() => handleDeleteComment()} variant="destructive">
-            Delete comment
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+    <>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          <ModalHeader className="flex flex-col gap-y-2">
+            <p>Delete Comment?</p>
+            <p className="text-sm text-default-500 font-normal">
+              Are you sure you want to delete this comment? This action cannot
+              be undone.
+            </p>
+          </ModalHeader>
+          <ModalBody>
+            <div className="flex justify-end">
+              <Button
+                onClick={() => handleDeleteComment()}
+                color="danger"
+                className="w-fit"
+              >
+                Delete comment
+              </Button>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }

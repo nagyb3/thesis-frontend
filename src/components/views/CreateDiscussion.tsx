@@ -1,12 +1,9 @@
-import { Label } from "@radix-ui/react-label";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
 import { useState } from "react";
-import { Button } from "../ui/button";
 import { useParams } from "react-router-dom";
 import { createDiscussion } from "@/api-client/modules/discussionApiClient";
 import { ImageUp, Trash2 } from "lucide-react";
 import BackButtonWithLink from "../BackButtonWithLink";
+import { Button, Input, Textarea } from "@nextui-org/react";
 
 export default function CreateDiscussion() {
   const [title, setTitle] = useState("");
@@ -58,7 +55,6 @@ export default function CreateDiscussion() {
   };
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    console.log("handle drop fired");
     event.preventDefault();
     event.stopPropagation();
     const droppedFiles = event.dataTransfer.files;
@@ -76,23 +72,25 @@ export default function CreateDiscussion() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-50px)] bg-neutral-100 flex flex-col items-center gap-y-4 py-8">
+    <div className="min-h-[calc(100vh-50px)] bg-background flex flex-col items-center gap-y-4 py-8">
       <BackButtonWithLink backLink={"/topic/" + topicId} />
       <p className="font-semibold text-xl">Create New Discussion:</p>
-      <div className="flex flex-col items-center w-[500px] gap-y-6">
+      <div className="flex flex-col items-center max-w-[532px] px-4 w-full gap-y-6">
         <div className="flex flex-col gap-y-2 w-full">
-          <Label htmlFor="title">Title</Label>
           <Input
-            required
+            variant="faded"
+            label="Title"
+            isRequired
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             id="title"
           />
         </div>
         <div className="flex flex-col gap-y-2 w-full">
-          <Label htmlFor="Content">Content</Label>
           <Textarea
-            required
+            label="Content"
+            variant="faded"
+            isRequired
             value={content}
             onChange={(e) => setContent(e.target.value)}
             id="content"
@@ -102,8 +100,8 @@ export default function CreateDiscussion() {
           <div className="relative">
             <img src={URL.createObjectURL(file)} alt="" />
             <Button
-              variant="destructive"
-              className="rounded-full absolute right-[-10px] top-[-10px] p-2"
+              color="danger"
+              className="rounded-full absolute right-[-10px] top-[-10px] p-2 hover:bg-[rgb(243, 18, 96)]"
               onClick={() => setFile(undefined)}
             >
               <Trash2 />
@@ -114,14 +112,14 @@ export default function CreateDiscussion() {
             onDrop={(e) => handleDrop(e)}
             onDragOver={(e) => e.preventDefault()}
             onClick={() => handleUploadClick()}
-            className="cursor-pointer bg-neutral-200 h-[200px] w-full rounded border border-dashed border-black flex justify-center items-center"
+            className="cursor-pointer bg-default-100 h-[200px] w-full rounded border border-dashed border-default-400 flex justify-center items-center"
           >
             <div className="flex flex-col gap-y-2 items-center">
-              <p className="text-gray-500 text-base">
+              <p className="text-default-500 text-base">
                 Upload an image for the discussions!
               </p>
               <ImageUp color="gray" />
-              <p className="text-gray-500 text-sm">(Max file size: 50mb)</p>
+              <p className="text-default-500 text-sm">(Max file size: 50mb)</p>
             </div>
             <input
               onChange={(e) => handleInputChange(e)}
@@ -131,7 +129,11 @@ export default function CreateDiscussion() {
             />
           </div>
         )}
-        <Button onChange={() => {}} onClick={() => handleCreate()}>
+        <Button
+          color="primary"
+          onChange={() => {}}
+          onClick={() => handleCreate()}
+        >
           Submit Discussion
         </Button>
       </div>

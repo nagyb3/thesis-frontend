@@ -1,12 +1,11 @@
 import { User } from "lucide-react";
-import { Card } from "../ui/card";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { Separator } from "../ui/separator";
 import { useEffect, useState } from "react";
 import UserProfileAchievements from "../user-profile/UserProfileAchievements";
 import { getUserById } from "@/api-client/modules/userApiClient";
 import UserProfileRating from "../user-profile/UserProfileRating";
 import UserProfileTrackedTime from "../user-profile/UserProfileTrackedTime";
+import { Card, Divider } from "@nextui-org/react";
 
 export default function MyProfile() {
   const { profile } = useAuthContext();
@@ -45,11 +44,11 @@ export default function MyProfile() {
             </div>
           </div>
         </div>
-        <Separator className="my-4" />
+        <Divider className="my-4" />
         <UserProfileAchievements />
-        <Separator className="my-4" />
+        <Divider className="my-4" />
         <UserProfileTrackedTime userId={profile?.id} isMyProfile={true} />
-        <Separator className="my-4" />
+        <Divider className="my-4" />
         <UserProfileRating
           isYourProfile={true}
           averageRating={averageRating}

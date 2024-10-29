@@ -1,11 +1,8 @@
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { CalendarIcon, Pencil, Trash } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "../ui/calendar";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 import { useEffect, useState } from "react";
 import { TrackedTimeType } from "@/types/TrackedTimeType";
 import {
@@ -25,7 +22,16 @@ import {
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { fillTrackedTimeDataWithZeroMinutes } from "@/utils/fillTrackedTimeDataWithZeroMinutes";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Label } from "@radix-ui/react-label";
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 
 const chartConfig = {
   minutes: {
@@ -113,7 +119,10 @@ export default function UserProfileTrackedTime({
     fetchTrackedTimes();
   }, [userId]);
 
-  const handleSubmitTrackedTime = async () => {
+  const handleSubmitTrackedTime = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
     if (!date || !minutes) return;
     const result = await createTrackedTime({
       date,
@@ -164,19 +173,25 @@ export default function UserProfileTrackedTime({
     }
   };
 
+  // state management for 'tracked times per day' modal
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   return (
     <div className="flex flex-col gap-y-4">
       <p className="text-2xl font-semibold">Time Tracker</p>
       <div className="flex flex-col items-between gap-y-4">
         {isMyProfile && (
-          <div className="flex gap-x-2">
+          <form
+            onSubmit={(e) => handleSubmitTrackedTime(e)}
+            className="flex gap-x-2"
+          >
             <div className="flex flex-col gap-y-2">
               <Label htmlFor="tracked-time-date-picker">Date:</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
                     id="tracked-time-date-picker"
-                    variant={"outline"}
+                    variant="flat"
                     className={cn(
                       "w-[280px] justify-start text-left font-normal",
                       !date && "text-muted-foreground"
@@ -199,8 +214,12 @@ export default function UserProfileTrackedTime({
             <div className="flex flex-col gap-y-2">
               <Label>Minutes:</Label>
               <Input
+                isRequired
+                variant="faded"
                 type="number"
-                value={minutes}
+                placeholder="25"
+                min={1}
+                value={String(minutes)}
                 onChange={(e) =>
                   setMinutes(
                     e.target.value ? Number(e.target.value) : undefined
@@ -208,13 +227,10 @@ export default function UserProfileTrackedTime({
                 }
               />
             </div>
-            <Button
-              className="self-end"
-              onClick={() => handleSubmitTrackedTime()}
-            >
+            <Button color="primary" className="self-end" type="submit">
               Submit
             </Button>
-          </div>
+          </form>
         )}
         <div className="flex flex-col gap-y-2">
           <div className="flex flex-col gap-y-2">
@@ -241,39 +257,49 @@ export default function UserProfileTrackedTime({
                 />
               </BarChart>
             </ChartContainer>
-          </div>
 
-          <Dialog>
-            <DialogTrigger>
-              <button className="hidden" id="bar-modal-trigger"></button>
-            </DialogTrigger>
-            <DialogContent>
-              <p>
-                Tracked times for{" "}
-                {triggerData?.date ? format(triggerData?.date, "PPP") : ""}
-              </p>
-              {trackedTimes &&
-                trackedTimes
-                  .filter(
-                    (trackedTime) => trackedTime.date === triggerData?.date
-                  )
-                  .map((trackedTime: TrackedTimeType) => (
-                    <div key={trackedTime.id} className="flex flex-col">
-                      <div className="flex justify-between">
-                        <p className="py-2">{trackedTime.minutes} minutes</p>
-                        <Button
-                          variant="destructive"
-                          onClick={() =>
-                            handleDeleteTrackedTime(trackedTime?.id ?? "")
-                          }
-                        >
-                          <Trash className="h-fit" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-            </DialogContent>
-          </Dialog>
+            <button
+              onClick={onOpen}
+              className="hidden"
+              id="bar-modal-trigger"
+            />
+
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+              <ModalContent>
+                <ModalHeader>
+                  <p>
+                    Tracked times for{" "}
+                    {triggerData?.date ? format(triggerData?.date, "PPP") : ""}
+                  </p>
+                </ModalHeader>
+                <ModalBody>
+                  {trackedTimes &&
+                    trackedTimes
+                      .filter(
+                        (trackedTime) => trackedTime.date === triggerData?.date
+                      )
+                      .map((trackedTime: TrackedTimeType) => (
+                        <div key={trackedTime.id} className="flex flex-col">
+                          <div className="flex justify-between">
+                            <p className="py-2">
+                              {trackedTime.minutes} minutes
+                            </p>
+                            <Button
+                              isIconOnly
+                              color="danger"
+                              onClick={() =>
+                                handleDeleteTrackedTime(trackedTime?.id ?? "")
+                              }
+                            >
+                              <Trash className="h-fit" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                </ModalBody>
+              </ModalContent>
+            </Modal>
+          </div>
 
           <p className="font-semibold text-lg">Daily goal:</p>
           <div className="flex gap-x-2 items-center">
@@ -284,8 +310,8 @@ export default function UserProfileTrackedTime({
                 </p>
                 {isMyProfile && (
                   <Button
-                    variant={"ghost"}
-                    className="h-fit"
+                    isIconOnly
+                    variant="light"
                     onClick={() => setIsEditingDailyGoal((prev) => !prev)}
                   >
                     <Pencil />
@@ -299,10 +325,12 @@ export default function UserProfileTrackedTime({
                   className="flex gap-x-2"
                 >
                   <Input
+                    variant="faded"
                     type="number"
                     placeholder="Daily goal minutes..."
                     className="w-[200px]"
-                    value={newDailyGoalState}
+                    min={1}
+                    value={String(newDailyGoalState)}
                     onChange={(e) =>
                       setNewDailyGoalState(
                         e.target.value === "" ? "" : Number(e.target.value)
@@ -310,9 +338,11 @@ export default function UserProfileTrackedTime({
                     }
                   />
 
-                  <Button type="submit">Submit</Button>
+                  <Button color="primary" type="submit">
+                    Submit
+                  </Button>
                   <Button
-                    variant={"secondary"}
+                    variant="faded"
                     onClick={() => {
                       setIsEditingDailyGoal((prev) => !prev);
                       setNewDailyGoalState(

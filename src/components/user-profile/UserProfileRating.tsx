@@ -1,8 +1,8 @@
-import { Button } from "../ui/button";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
 import { useParams } from "react-router-dom";
 import { createRating } from "@/api-client/modules/ratingApiClient";
+import { Button } from "@nextui-org/react";
 
 export default function UserProfileRating({
   averageRating,
@@ -65,7 +65,7 @@ export default function UserProfileRating({
                 maxWidth: "170px",
               }}
             />
-            <Button variant="secondary" onClick={() => handleSubmitRating()}>
+            <Button variant="faded" onClick={() => handleSubmitRating()}>
               Submit
             </Button>
           </div>

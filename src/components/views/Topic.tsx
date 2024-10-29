@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { getTopicById } from "@/api-client/modules/topicApiClient";
 import { TopicType } from "@/types/TopicType";
 import DiscussionsTab from "../topic/tabs/DiscussionsTab";
@@ -11,6 +10,7 @@ import { Book, Send, Waypoints } from "lucide-react";
 import { DiscussionType } from "@/types/DiscussionType";
 import { UserType } from "@/types/UserType";
 import { useAuthContext } from "@/contexts/AuthContext";
+import { Tab, Tabs } from "@nextui-org/react";
 
 export default function Topic() {
   const [topic, setTopic] = useState<TopicType | undefined>(undefined);
@@ -50,54 +50,63 @@ export default function Topic() {
   );
 
   return (
-    <div className="h-[calc(100vh-50px)] bg-neutral-50">
+    <div className="h-[calc(100vh-50px)] bg-background">
       {topic && (
         <div className="flex flex-col items-center">
           <TopicHeader
             topic={topic}
             isCurrentUserModeratorOfTopic={isCurrentUserModeratorOfTopic}
           />
-
-          <Tabs
-            defaultValue="discussions"
-            className="flex flex-col items-center w-full"
-          >
-            <TabsList className="grid grid-cols-3 w-[600px]">
-              <TabsTrigger value="discussions">
+          <Tabs>
+            <Tab
+              key="discussions"
+              title={
                 <div className="flex gap-x-2 items-center">
                   Discussions
                   <Send size={16} />
                 </div>
-              </TabsTrigger>
-              <TabsTrigger value="learning-paths">
+              }
+              className="w-full px-4"
+            >
+              <div className="flex justify-center">
+                <DiscussionsTab
+                  topic={topic}
+                  discussions={discussions}
+                  setDiscussions={setDiscussions}
+                />
+              </div>
+            </Tab>
+            <Tab
+              key="learning-paths"
+              title={
                 <div className="flex gap-x-2 items-center">
                   Learning paths
                   <Waypoints size={16} />
                 </div>
-              </TabsTrigger>
-              <TabsTrigger value="learning-resources">
+              }
+              className="w-full px-4"
+            >
+              <div className="flex justify-center">
+                <LearningPathsTab />
+              </div>
+            </Tab>
+            <Tab
+              key="learning-resources"
+              title={
                 <div className="flex gap-x-2 items-center">
                   Learning resources
                   <Book size={16} />
                 </div>
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="discussions">
-              <DiscussionsTab
-                topic={topic}
-                discussions={discussions}
-                setDiscussions={setDiscussions}
-              />
-            </TabsContent>
-            <TabsContent value="learning-paths">
-              <LearningPathsTab />
-            </TabsContent>
-            <TabsContent value="learning-resources">
-              <LearningResourcesTab
-                isCurrentUserModeratorOfTopic={isCurrentUserModeratorOfTopic}
-                topic={topic}
-              />
-            </TabsContent>
+              }
+              className="w-full px-4"
+            >
+              <div className="flex justify-center">
+                <LearningResourcesTab
+                  isCurrentUserModeratorOfTopic={isCurrentUserModeratorOfTopic}
+                  topic={topic}
+                />
+              </div>
+            </Tab>
           </Tabs>
         </div>
       )}

@@ -2,9 +2,9 @@ import { Mic, MicOff, Video, VideoOff } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import io, { Socket } from "socket.io-client";
-import { Button } from "../ui/button";
 import { getUserById } from "@/api-client/modules/userApiClient";
 import { UserType } from "@/types/UserType";
+import { Button } from "@nextui-org/react";
 
 const VideoChat: React.FC = () => {
   const { userId: userIdParam } = useParams();
@@ -191,10 +191,8 @@ const VideoChat: React.FC = () => {
       <div className="flex gap-x-8 justify-center mt-8">
         <div className="flex gap-x-4">
           <Button
-            className={
-              "rounded-full" +
-              (isMicrophoneMuted ? " bg-red-500 hover:bg-red-400" : "")
-            }
+            color={isMicrophoneMuted ? "danger" : "primary"}
+            className={"rounded-full"}
             onClick={toggleMicrophone}
           >
             {!isMicrophoneMuted ? (
@@ -204,10 +202,8 @@ const VideoChat: React.FC = () => {
             )}
           </Button>
           <Button
-            className={
-              "rounded-full" +
-              (isWebcamOff ? " bg-red-500 hover:bg-red-400" : "")
-            }
+            color={isWebcamOff ? "danger" : "primary"}
+            className={"rounded-full"}
             onClick={toggleWebcam}
           >
             {!isWebcamOff ? (
@@ -218,7 +214,7 @@ const VideoChat: React.FC = () => {
           </Button>
         </div>
         <Button
-          variant="destructive"
+          color="danger"
           onClick={() => (window.location.href = "/user/" + userIdParam)}
         >
           Leave

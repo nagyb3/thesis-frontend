@@ -1,18 +1,16 @@
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { Textarea } from "../ui/textarea";
 import { createTopic } from "@/api-client/modules/topicApiClient";
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Textarea,
+  useDisclosure,
+} from "@nextui-org/react";
 
 export function AddTopicDialog({ children }: { children: React.ReactNode }) {
   const [name, setName] = useState("");
@@ -27,45 +25,51 @@ export function AddTopicDialog({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>Create New Topic</DialogTitle>
-          <DialogDescription>
-            You can create a new topic in something you are interested in here.
-            Note: when you create a new topic, you become the new owner of it.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              id="name"
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="description" className="text-right">
-              Description
-            </Label>
-            <Textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              id="description"
-              className="col-span-3"
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button onClick={() => handleCreateNewTopic()}>Create</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <>
+      <div onClick={onOpen}>{children}</div>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader>Create New Topic</ModalHeader>
+              <ModalBody className="flex flex-col gap-y-4 items-center">
+                <Input
+                  variant="faded"
+                  label="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  id="name"
+                  className="w-[350px]"
+                />
+
+                <Textarea
+                  variant="faded"
+                  label="Description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  id="description"
+                  className="w-[350px]"
+                />
+              </ModalBody>
+              <ModalFooter className="flex justify-end gap-x-4">
+                <Button
+                  color="primary"
+                  variant="faded"
+                  onPress={() => onClose()}
+                >
+                  Cancel
+                </Button>
+                <Button color="primary" onClick={() => handleCreateNewTopic()}>
+                  Create
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
