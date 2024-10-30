@@ -28,7 +28,7 @@ export default function Navbar() {
 
           <Popover>
             <PopoverTrigger className="h-fit">
-              <div className="bg-primary p-2 rounded-full cursor-pointer">
+              <div className="bg-black p-2 rounded-full cursor-pointer">
                 <User color="white" />
               </div>
             </PopoverTrigger>

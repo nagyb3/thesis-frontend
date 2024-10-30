@@ -34,7 +34,7 @@ export default function MyProfile() {
     <div className="flex flex-col gap-y-2 bg-gray-100 items-center min-h-[calc(100vh-50px)] p-8">
       <Card className="w-[900px] px-8 py-8 flex flex-col gap-y-2">
         <div className="flex gap-x-4 items-end">
-          <div className="bg-primary p-2 rounded-full w-fit h-fit">
+          <div className="bg-black p-2 rounded-full w-fit h-fit">
             <User color="white" />
           </div>
           <div className="flex flex-col gap-y-2">

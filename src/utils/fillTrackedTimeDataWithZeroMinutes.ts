@@ -1,6 +1,9 @@
 export const fillTrackedTimeDataWithZeroMinutes = (
   array: { date: string; minutes: number }[]
 ) => {
+  if (array.length === 0) {
+    return array;
+  }
   array.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   const startDate = new Date(array[0].date);

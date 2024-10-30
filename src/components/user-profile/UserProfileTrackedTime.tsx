@@ -235,28 +235,38 @@ export default function UserProfileTrackedTime({
         <div className="flex flex-col gap-y-2">
           <div className="flex flex-col gap-y-2">
             <p className="font-semibold text-lg">Statistics:</p>
-            <p className="text-black/70 text-sm">
-              Click on a bar to see the details for the day!
-            </p>
-            <ChartContainer config={chartConfig} className="min-h-[200px]">
-              <BarChart accessibilityLayer data={trackedTimesData}>
-                <CartesianGrid vertical={true} />
-                <XAxis
-                  dataKey="date"
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
-                />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar
-                  onClick={(e) => isMyProfile && handleBarClick(e)}
-                  dataKey="minutes"
-                  fill="var(--color-minutes)"
-                  radius={4}
-                  className={isMyProfile ? "cursor-pointer" : ""}
-                />
-              </BarChart>
-            </ChartContainer>
+            {trackedTimesData && trackedTimesData.length > 0 ? (
+              <>
+                <p className="text-black/70 text-sm">
+                  Click on a bar to see the details for the day!
+                </p>
+                <ChartContainer config={chartConfig} className="min-h-[200px]">
+                  <BarChart accessibilityLayer data={trackedTimesData}>
+                    <CartesianGrid vertical={true} />
+                    <XAxis
+                      dataKey="date"
+                      tickLine={false}
+                      tickMargin={10}
+                      axisLine={false}
+                    />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <Bar
+                      onClick={(e) => isMyProfile && handleBarClick(e)}
+                      dataKey="minutes"
+                      fill="var(--color-minutes)"
+                      radius={4}
+                      className={isMyProfile ? "cursor-pointer" : ""}
+                    />
+                  </BarChart>
+                </ChartContainer>
+              </>
+            ) : (
+              <div className="w-full rounded-lg bg-default-100 py-24 flex justify-center">
+                <p className="text-default-500">
+                  You didn't submit a tracked time yet...
+                </p>
+              </div>
+            )}
 
             <button
               onClick={onOpen}
