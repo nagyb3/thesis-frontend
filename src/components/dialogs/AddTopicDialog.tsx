@@ -37,7 +37,10 @@ export function AddTopicDialog({ children }: { children: React.ReactNode }) {
               <ModalHeader>Create New Topic</ModalHeader>
               <ModalBody className="flex flex-col gap-y-4 items-center">
                 <Input
-                  variant="faded"
+                  classNames={{
+                    inputWrapper: "border-black/40 border",
+                  }}
+                  variant="bordered"
                   label="Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -46,7 +49,10 @@ export function AddTopicDialog({ children }: { children: React.ReactNode }) {
                 />
 
                 <Textarea
-                  variant="faded"
+                  classNames={{
+                    inputWrapper: "border-black/40 border",
+                  }}
+                  variant="bordered"
                   label="Description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -57,7 +63,7 @@ export function AddTopicDialog({ children }: { children: React.ReactNode }) {
               <ModalFooter className="flex justify-end gap-x-4">
                 <Button
                   color="primary"
-                  variant="faded"
+                  variant="bordered"
                   onPress={() => onClose()}
                 >
                   Cancel

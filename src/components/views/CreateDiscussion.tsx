@@ -78,7 +78,10 @@ export default function CreateDiscussion() {
       <div className="flex flex-col items-center max-w-[532px] px-4 w-full gap-y-6">
         <div className="flex flex-col gap-y-2 w-full">
           <Input
-            variant="faded"
+            classNames={{
+              inputWrapper: "border-black/40 border",
+            }}
+            variant="bordered"
             label="Title"
             isRequired
             value={title}
@@ -88,8 +91,11 @@ export default function CreateDiscussion() {
         </div>
         <div className="flex flex-col gap-y-2 w-full">
           <Textarea
+            classNames={{
+              inputWrapper: "border-black/40 border",
+            }}
             label="Content"
-            variant="faded"
+            variant="bordered"
             isRequired
             value={content}
             onChange={(e) => setContent(e.target.value)}

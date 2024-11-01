@@ -32,7 +32,11 @@ export default function Login() {
 
   return (
     <div className="bg-background flex justify-center items-center h-[calc(100vh-50px)] px-4">
-      <Card>
+      <Card
+        classNames={{
+          base: "border-black/20 border",
+        }}
+      >
         <CardBody>
           <form
             onSubmit={(e) => handleSubmit(e)}
@@ -41,8 +45,11 @@ export default function Login() {
             <p className="text-3xl font-semibold">Login</p>
             <div className="flex flex-col gap-y-2 w-full max-w-[300px]">
               <Input
+                classNames={{
+                  inputWrapper: "border-black/40 border",
+                }}
                 label="Username"
-                variant="faded"
+                variant="bordered"
                 value={usernameInput}
                 onChange={(e) => setUsernameInput(e.target.value)}
                 isRequired
@@ -50,8 +57,11 @@ export default function Login() {
             </div>
             <div className="flex flex-col gap-y-2 w-full max-w-[300px]">
               <Input
+                classNames={{
+                  inputWrapper: "border-black/40 border",
+                }}
                 label="Password"
-                variant="faded"
+                variant="bordered"
                 value={passwordInput}
                 onChange={(e) => setPasswordInput(e.target.value)}
                 type="password"

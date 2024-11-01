@@ -1,6 +1,13 @@
 import { editTopic } from "@/api-client/modules/topicApiClient";
 import { TopicType } from "@/types/TopicType";
-import { Button, Card, CardBody, CardHeader, Input } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Input,
+  Tooltip,
+} from "@nextui-org/react";
 import { Check, CircleX } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -33,7 +40,12 @@ export default function LearningResourcesTab({
   };
 
   return (
-    <Card className="w-[min(100%,900px)]">
+    <Card
+      classNames={{
+        base: "border-black/20 border",
+      }}
+      className="w-[min(100%,900px)]"
+    >
       <CardHeader className="px-6 pt-6">
         <div className="flex gap-x-4 items-center justify-between w-full">
           <div>
@@ -44,7 +56,21 @@ export default function LearningResourcesTab({
             </p>
           </div>
           {isCurrentUserModeratorOfTopic && !isEditing && (
-            <Button onClick={() => setIsEditing(true)}>Edit</Button>
+            <Tooltip
+              color="primary"
+              placement="bottom"
+              showArrow={true}
+              content={
+                <p className="max-w-[500px] text-center">
+                  You are an owners of the topic, so you have the right to edit
+                  to Learning Resources for this topic.
+                </p>
+              }
+            >
+              <Button color="primary" onClick={() => setIsEditing(true)}>
+                Edit learning resources
+              </Button>
+            </Tooltip>
           )}
         </div>
       </CardHeader>
@@ -55,7 +81,10 @@ export default function LearningResourcesTab({
               {learningResources?.map((resource, index) => (
                 <li key={index} className="flex gap-x-3 w-full">
                   <Input
-                    variant="faded"
+                    classNames={{
+                      inputWrapper: "border-black/40 border",
+                    }}
+                    variant="bordered"
                     onChange={(e) => {
                       setLearningResources((prev) => {
                         const newResources = [...prev];
@@ -69,6 +98,7 @@ export default function LearningResourcesTab({
                     value={resource}
                   />
                   <Button
+                    isIconOnly
                     color="danger"
                     onClick={(e) => {
                       e.preventDefault();
@@ -85,7 +115,6 @@ export default function LearningResourcesTab({
               ))}
               <div className="flex justify-between">
                 <Button
-                  variant="faded"
                   onClick={(e) => {
                     e.preventDefault();
                     setLearningResources((prev) => [...prev, ""]);
@@ -93,9 +122,9 @@ export default function LearningResourcesTab({
                 >
                   Add new item
                 </Button>
-                <Button color="primary" type="submit">
+                <Button color="success" type="submit">
                   Save
-                  <Check color="white" />
+                  <Check />
                 </Button>
               </div>
             </ul>

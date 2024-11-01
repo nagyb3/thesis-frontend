@@ -32,10 +32,15 @@ export default function DiscussionsTab({
   };
 
   return (
-    <Card className="w-[min(100%,900px)]">
+    <Card
+      classNames={{
+        base: "border-black/20 border",
+      }}
+      className="w-[min(100%,900px)]"
+    >
       <CardHeader className="px-6 pt-6">
         <div className="flex gap-x-4 items-center justify-between w-full">
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col">
             <p className="block font-bold text-2xl">Discussions</p>
             <p className="block text-sm text-default-500">
               Here you can see all of the discussion by the other users related
@@ -54,7 +59,10 @@ export default function DiscussionsTab({
       </CardHeader>
       <CardBody className="space-y-2 p-6">
         <Input
-          variant="faded"
+          classNames={{
+            inputWrapper: "border-black/40 border",
+          }}
+          variant="bordered"
           className="w-[400px] text-sm mb-6"
           placeholder="Search for discussion..."
           onChange={(e) => fetchDiscussions(e)}
@@ -65,10 +73,26 @@ export default function DiscussionsTab({
               key={discussion.id}
               href={"/topic/" + topic?.id + "/discussion/" + discussion.id}
             >
-              <Card className="p-4 cursor-pointer flex flex-col items-center w-full">
-                <p className="self-start text-xl font-semibold">
-                  {discussion.title}
-                </p>
+              <Card
+                classNames={{
+                  base: "border-black/20 border",
+                }}
+                className="p-4 cursor-pointer flex flex-col items-center w-full"
+              >
+                <div className="flex justify-between w-full">
+                  <p className="self-start text-xl font-semibold">
+                    {discussion.title}
+                  </p>
+
+                  {discussion?.author?.username && (
+                    <p>
+                      Created by: @
+                      <span className="font-bold hover:underline">
+                        {discussion?.author?.username}
+                      </span>
+                    </p>
+                  )}
+                </div>
                 {discussion?.image && (
                   <img
                     src={discussion?.image}

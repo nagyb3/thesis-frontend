@@ -49,7 +49,7 @@ export default function EditDiscussionDialog({
       <Button
         isIconOnly
         onPress={onOpen}
-        variant="faded"
+        variant="bordered"
         className="ml-4 px-0 w-[42px] h-[42px]"
       >
         <Pencil />
@@ -65,7 +65,10 @@ export default function EditDiscussionDialog({
           </ModalHeader>
           <ModalBody className="flex flex-col gap-y-4">
             <Input
-              variant="faded"
+              classNames={{
+                inputWrapper: "border-black/40 border",
+              }}
+              variant="bordered"
               label="Title"
               autoComplete="off"
               value={discussionTitle}
@@ -75,7 +78,10 @@ export default function EditDiscussionDialog({
             />
 
             <Textarea
-              variant="faded"
+              classNames={{
+                inputWrapper: "border-black/40 border",
+              }}
+              variant="bordered"
               label="Content"
               autoComplete="off"
               value={discussionContent}

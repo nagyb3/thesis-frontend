@@ -77,7 +77,12 @@ export default function Discussion() {
   return (
     <div className="min-h-[calc(100vh-50px)] bg-background flex flex-col items-center py-8 gap-y-4">
       <BackButtonWithLink backLink={"/topic/" + topicId} />
-      <Card className="py-4 px-8 w-[900px]">
+      <Card
+        classNames={{
+          base: "border-black/20 border",
+        }}
+        className="py-4 px-8 w-[900px]"
+      >
         <div className="flex gap-x-2 items-center justify-between">
           <p className="font-semibold text-xl">{discussion?.title}</p>
           <div className="flex">
@@ -93,8 +98,8 @@ export default function Discussion() {
             )}
           </div>
         </div>
-        <p className="pb-4 ml-8">
-          Author:{" "}
+        <p className="pb-4">
+          Created by:{" "}
           <a
             href={
               discussion?.author?.id === profile?.id
@@ -128,7 +133,12 @@ export default function Discussion() {
           </div>
         )}
       </Card>
-      <Card className="py-4 px-8 w-[900px] flex flex-col gap-y-4">
+      <Card
+        classNames={{
+          base: "border-black/20 border",
+        }}
+        className="py-4 px-8 w-[900px] flex flex-col gap-y-4"
+      >
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -139,8 +149,11 @@ export default function Discussion() {
           <div className="flex flex-col gap-y-2">
             <Label htmlFor="comment">Send a new comment:</Label>
             <Textarea
+              classNames={{
+                inputWrapper: "border-black/40 border",
+              }}
               isRequired
-              variant="faded"
+              variant="bordered"
               id="comment"
               onChange={(e) => setInputState(e.target.value)}
               value={inputState}
@@ -149,7 +162,7 @@ export default function Discussion() {
             />
           </div>
           <Button color="primary" type="submit">
-            Send
+            Send Comment
           </Button>
         </form>
         <p className="text-lg">Comments:</p>

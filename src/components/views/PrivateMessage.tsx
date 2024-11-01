@@ -93,7 +93,12 @@ export default function PrivateMessage() {
   return (
     <div className="min-h-[calc(100vh-50px)] max-h-[calc(100vh-50px)] bg-gray-50 p-4 flex justify-center">
       {!rejectedFromRoom ? (
-        <Card className="flex flex-col justify-start max-w-[900px] w-full">
+        <Card
+          classNames={{
+            base: "border-black/20 border",
+          }}
+          className="flex flex-col justify-start max-w-[900px] w-full"
+        >
           <div className="px-8 py-6 border-b border-default-300">
             <p className="text-2xl font-semibold">
               {otherUserProfile?.username}
@@ -116,7 +121,10 @@ export default function PrivateMessage() {
           >
             <div className="w-full">
               <Input
-                variant="faded"
+                classNames={{
+                  inputWrapper: "border-black/40 border",
+                }}
+                variant="bordered"
                 label="Message"
                 value={newMessageInput}
                 onChange={(e) => setNewMessageInput(e.target.value)}

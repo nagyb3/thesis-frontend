@@ -57,7 +57,12 @@ export default function Topic() {
             topic={topic}
             isCurrentUserModeratorOfTopic={isCurrentUserModeratorOfTopic}
           />
-          <Tabs>
+          <Tabs
+            color="primary"
+            classNames={{
+              tabList: "bg-black/5 border border-black/20",
+            }}
+          >
             <Tab
               key="discussions"
               title={
@@ -87,7 +92,7 @@ export default function Topic() {
               className="w-full px-4"
             >
               <div className="flex justify-center">
-                <LearningPathsTab />
+                <LearningPathsTab topic={topic} />
               </div>
             </Tab>
             <Tab

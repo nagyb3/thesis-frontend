@@ -57,7 +57,10 @@ export default function EditTopicDialog({ topic }: { topic: TopicType }) {
                     Name
                   </Label>
                   <Input
-                    variant="faded"
+                    classNames={{
+                      inputWrapper: "border-black/40 border",
+                    }}
+                    variant="bordered"
                     autoComplete="off"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -70,7 +73,10 @@ export default function EditTopicDialog({ topic }: { topic: TopicType }) {
                     Description
                   </Label>
                   <Textarea
-                    variant="faded"
+                    classNames={{
+                      inputWrapper: "border-black/40 border",
+                    }}
+                    variant="bordered"
                     autoComplete="off"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}

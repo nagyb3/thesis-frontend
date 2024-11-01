@@ -40,7 +40,12 @@ export default function CommentCard({
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
 
   return (
-    <Card className="flex flex-col gap-y-2 px-4 p-4">
+    <Card
+      classNames={{
+        base: "border-black/20 border",
+      }}
+      className="flex flex-col gap-y-2 px-4 p-4"
+    >
       <div className="flex justify-between h-[40px] items-center">
         <p className="font-semibold">
           <a
@@ -69,7 +74,7 @@ export default function CommentCard({
               onOpenChange={() => setIsPopoverOpen((prev) => !prev)}
             >
               <PopoverTrigger>
-                <Button isIconOnly variant="faded" className="p-0 w-[40px]">
+                <Button isIconOnly variant="bordered" className="p-0 w-[40px]">
                   <Ellipsis />
                 </Button>
               </PopoverTrigger>

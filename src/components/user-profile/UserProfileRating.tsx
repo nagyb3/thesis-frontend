@@ -65,7 +65,7 @@ export default function UserProfileRating({
                 maxWidth: "170px",
               }}
             />
-            <Button variant="faded" onClick={() => handleSubmitRating()}>
+            <Button variant="bordered" onClick={() => handleSubmitRating()}>
               Submit
             </Button>
           </div>

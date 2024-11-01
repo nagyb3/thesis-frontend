@@ -214,8 +214,11 @@ export default function UserProfileTrackedTime({
             <div className="flex flex-col gap-y-2">
               <Label>Minutes:</Label>
               <Input
+                classNames={{
+                  inputWrapper: "border-black/40 border",
+                }}
                 isRequired
-                variant="faded"
+                variant="bordered"
                 type="number"
                 placeholder="25"
                 min={1}
@@ -335,7 +338,10 @@ export default function UserProfileTrackedTime({
                   className="flex gap-x-2"
                 >
                   <Input
-                    variant="faded"
+                    classNames={{
+                      inputWrapper: "border-black/40 border",
+                    }}
+                    variant="bordered"
                     type="number"
                     placeholder="Daily goal minutes..."
                     className="w-[200px]"
@@ -349,10 +355,10 @@ export default function UserProfileTrackedTime({
                   />
 
                   <Button color="primary" type="submit">
-                    Submit
+                    Save
                   </Button>
                   <Button
-                    variant="faded"
+                    variant="bordered"
                     onClick={() => {
                       setIsEditingDailyGoal((prev) => !prev);
                       setNewDailyGoalState(

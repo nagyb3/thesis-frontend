@@ -38,7 +38,12 @@ export default function Register() {
 
   return (
     <div className="bg-background flex justify-center items-center h-[calc(100vh-50px)] px-4">
-      <Card className="p-3">
+      <Card
+        classNames={{
+          base: "border-black/20 border",
+        }}
+        className="p-3"
+      >
         <form
           onSubmit={(e) => handleSubmit(e)}
           className="flex flex-col gap-y-6 items-center px-4 py-8 min-w-[500px] h-fit"
@@ -46,9 +51,12 @@ export default function Register() {
           <p className="text-3xl font-semibold">Register</p>
           <div className="flex flex-col gap-y-2 w-full max-w-[300px]">
             <Input
+              classNames={{
+                inputWrapper: "border-black/40 border",
+              }}
               label="Username"
               id="username"
-              variant="faded"
+              variant="bordered"
               value={usernameInput}
               onChange={(e) => setUsernameInput(e.target.value)}
               isRequired
@@ -56,9 +64,12 @@ export default function Register() {
           </div>
           <div className="flex flex-col gap-y-2 w-full max-w-[300px]">
             <Input
+              classNames={{
+                inputWrapper: "border-black/40 border",
+              }}
               label="Password"
               id="password"
-              variant="faded"
+              variant="bordered"
               value={passwordInput}
               onChange={(e) => setPasswordInput(e.target.value)}
               type="password"
@@ -67,9 +78,12 @@ export default function Register() {
           </div>
           <div className="flex flex-col gap-y-2 w-full max-w-[300px]">
             <Input
+              classNames={{
+                inputWrapper: "border-black/40 border",
+              }}
               label="Confirm Password"
               id="confirm-password"
-              variant="faded"
+              variant="bordered"
               value={confirmPasswordInput}
               onChange={(e) => setConfirmPasswordInput(e.target.value)}
               type="password"

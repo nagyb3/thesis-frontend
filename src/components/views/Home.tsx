@@ -43,7 +43,10 @@ export default function Home() {
           </AddTopicDialog>
         </div>
         <Input
-          variant="faded"
+          classNames={{
+            inputWrapper: "border-black/40 border",
+          }}
+          variant="bordered"
           className="w-[400px] text-sm mb-8"
           placeholder="Search for name of topic..."
           onChange={handleTopicSearchInputChange}
@@ -52,7 +55,12 @@ export default function Home() {
           <div className="grid grid-cols-2 gap-4">
             {allTopics.map((topic: TopicType) => (
               <Link href={`/topic/${topic?.id}`} key={topic?.id}>
-                <Card className="p-4 cursor-pointer w-full h-full">
+                <Card
+                  classNames={{
+                    base: "border-black/20 border",
+                  }}
+                  className="p-4 cursor-pointer w-full h-full"
+                >
                   <p className="text-lg">{topic?.name}</p>
                   <p className="text-sm text-gray-500 truncate">
                     {topic?.description}

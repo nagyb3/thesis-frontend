@@ -61,7 +61,7 @@ export default function DiscussionFeedback({
     <div className="flex gap-x-2">
       <Button
         className="p-2 h-fit flex gap-x-2"
-        variant="faded"
+        variant="bordered"
         onClick={() => {
           if (isOn) {
             handleClick("none");
@@ -77,7 +77,7 @@ export default function DiscussionFeedback({
       </Button>
       <Button
         className="p-2 h-fit flex gap-x-2"
-        variant="faded"
+        variant="bordered"
         onClick={() => {
           if (isDown) {
             handleClick("none");

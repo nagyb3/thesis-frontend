@@ -19,17 +19,17 @@ export default function Navbar() {
   const { profile } = useAuthContext();
 
   return (
-    <div className="bg-neutral-300 h-[50px] px-12 flex justify-between items-center">
+    <div className="bg-primary h-[50px] px-12 flex justify-between items-center">
       {!isCurrentPathAuthRoute && (
         <>
           <a href="/" className="cursor-pointer">
-            <House />
+            <House color="white" />
           </a>
 
           <Popover>
             <PopoverTrigger className="h-fit">
-              <div className="bg-black p-2 rounded-full cursor-pointer">
-                <User color="white" />
+              <div className="bg-white p-2 rounded-full cursor-pointer">
+                <User color="black" />
               </div>
             </PopoverTrigger>
             <PopoverContent className="flex flex-col gap-y-4 p-4">
