@@ -119,13 +119,12 @@ const VideoChat: React.FC = () => {
         });
     });
 
-    peerConnectionRef.current.onconnectionstatechange = () => {
-      console.log(
-        "connection state:",
-        peerConnectionRef.current?.connectionState
-      );
-      if (peerConnectionRef.current?.connectionState === "failed") {
-        console.error("Connection failed for peer connection");
+    peerConnectionRef.current.onconnectionstatechange = async () => {
+      const state = peerConnectionRef.current?.connectionState;
+      console.log("connection state:", state);
+      if (state === "disconnected" || state === "failed") {
+        console.error("Connection failed or disconnected. Restarting ICE.");
+        await createAndSendOffer();
       }
     };
 
