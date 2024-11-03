@@ -51,6 +51,7 @@ const VideoChat: React.FC = () => {
     return () => {
       socketRef.current?.disconnect();
       localStream?.getTracks().forEach((track) => track.stop());
+      peerConnectionRef.current?.close();
     };
   }, [videoChatRoomId]);
 
@@ -101,6 +102,7 @@ const VideoChat: React.FC = () => {
 
     peerConnectionRef.current.onicecandidate = (event) => {
       if (event.candidate) {
+        console.log("Sending ICE candidate:", event.candidate);
         socketRef.current?.emit("ice-candidate", {
           candidate: event.candidate,
           roomId: videoChatRoomId,
@@ -109,10 +111,23 @@ const VideoChat: React.FC = () => {
     };
 
     socketRef.current?.on("ice-candidate", (iceCandidate: RTCIceCandidate) => {
-      peerConnectionRef.current?.addIceCandidate(
-        new RTCIceCandidate(iceCandidate)
-      );
+      console.log("Received ICE candidate:", iceCandidate);
+      peerConnectionRef.current
+        ?.addIceCandidate(new RTCIceCandidate(iceCandidate))
+        .catch((error) => {
+          console.error("error adding received ICE candidate:", error);
+        });
     });
+
+    peerConnectionRef.current.onconnectionstatechange = () => {
+      console.log(
+        "connection state:",
+        peerConnectionRef.current?.connectionState
+      );
+      if (peerConnectionRef.current?.connectionState === "failed") {
+        console.error("Connection failed for peer connection");
+      }
+    };
 
     socketRef.current?.on("offer", async (offer: RTCSessionDescriptionInit) => {
       await peerConnectionRef.current?.setRemoteDescription(
@@ -139,9 +154,11 @@ const VideoChat: React.FC = () => {
   };
 
   const createAndSendOffer = async () => {
-    const offer = await peerConnectionRef.current?.createOffer();
-    await peerConnectionRef.current?.setLocalDescription(offer);
-    socketRef.current?.emit("offer", { offer, roomId: videoChatRoomId });
+    if (peerConnectionRef.current?.signalingState === "stable") {
+      const offer = await peerConnectionRef.current.createOffer();
+      await peerConnectionRef.current.setLocalDescription(offer);
+      socketRef.current?.emit("offer", { offer, roomId: videoChatRoomId });
+    }
   };
 
   const toggleMicrophone = () => {
