@@ -80,13 +80,14 @@ const VideoChat: React.FC = () => {
   const setupPeerConnection = (stream: MediaStream) => {
     peerConnectionRef.current = new RTCPeerConnection({
       iceServers: [
-        { urls: "stun:stun.l.google.com:19302" },
+        // { urls: "stun:stun.l.google.com:19302" },
         {
           urls: `turn:${import.meta.env.VITE_TURN_SERVER_IP}`,
           username: import.meta.env.VITE_TURN_SERVER_USERNAME,
           credential: import.meta.env.VITE_TURN_SERVER_PASSWORD,
         },
       ],
+      iceTransportPolicy: "relay",
     });
 
     stream.getTracks().forEach((track) => {
@@ -122,10 +123,6 @@ const VideoChat: React.FC = () => {
     peerConnectionRef.current.onconnectionstatechange = async () => {
       const state = peerConnectionRef.current?.connectionState;
       console.log("connection state:", state);
-      if (state === "disconnected" || state === "failed") {
-        console.error("Connection failed or disconnected. Restarting ICE.");
-        await createAndSendOffer();
-      }
     };
 
     socketRef.current?.on("offer", async (offer: RTCSessionDescriptionInit) => {
