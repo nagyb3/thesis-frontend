@@ -2,9 +2,9 @@
 
 ### Steps to run this project locally:
 
-1. Install node and npm (if necesary): https://nodejs.org/en/download
+1. Install Node (if necesary): https://nodejs.org/en/download
 
-2. Clone the repository to your machine using the terminal
+2. Clone the repository to your machine:
 
 ```bash
 git clone git@github.com:nagyb3/thesis-frontend.git
@@ -22,7 +22,7 @@ cd thesis-frontend
 npm install
 ```
 
-5. Create a file named `.env` for managing environment variables in the root of this project and give it following content:
+5. Create a file named .env in the root directory of this project to manage environment variables, and add the following content:
 
 ```bash
 VITE_API_URI="http://localhost:5500"
