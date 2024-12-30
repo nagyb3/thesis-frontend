@@ -1,50 +1,38 @@
-# React + TypeScript + Vite
+# thesis-frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Steps to run this project locally:
 
-Currently, two official plugins are available:
+1. Install node and npm (if necesary): https://nodejs.org/en/download
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+2. Clone the repository to your machine using the terminal
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+git clone git@github.com:nagyb3/thesis-frontend.git
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+3. Navigate to the cloned repository:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+```bash
+cd thesis-frontend
+```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+4. Install the dependencies using NPM:
+
+```bash
+npm install
+```
+
+5. Create a file named `.env` for managing environment variables in the root of this project and give it following content:
+
+```bash
+VITE_API_URI="http://localhost:5500"
+VITE_TURN_SERVER_IP=
+VITE_TURN_SERVER_USERNAME=
+VITE_TURN_SERVER_PASSWORD=
+```
+
+6. Run the project
+
+```bash
+npm run dev
 ```
