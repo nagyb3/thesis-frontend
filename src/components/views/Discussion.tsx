@@ -75,13 +75,13 @@ export default function Discussion() {
     discussion?.author?.id === profile?.id;
 
   return (
-    <div className="min-h-[calc(100vh-50px)] bg-background flex flex-col items-center py-8 gap-y-4">
+    <div className="min-h-[calc(100vh-50px)] bg-background flex flex-col items-center py-8 gap-y-4 p-4">
       <BackButtonWithLink backLink={"/topic/" + topicId} />
       <Card
         classNames={{
           base: "border-black/20 border",
         }}
-        className="py-4 px-8 w-[900px]"
+        className="py-4 px-8 w-[min(100%,900px)]"
       >
         <div className="flex gap-x-2 items-center justify-between">
           <p className="font-semibold text-xl">{discussion?.title}</p>
@@ -137,7 +137,7 @@ export default function Discussion() {
         classNames={{
           base: "border-black/20 border",
         }}
-        className="py-4 px-8 w-[900px] flex flex-col gap-y-4"
+        className="py-4 px-8 w-[min(100%,900px)] flex flex-col gap-y-4"
       >
         <form
           onSubmit={(e) => {
@@ -146,7 +146,7 @@ export default function Discussion() {
           }}
           className="py-4 flex gap-x-4 items-end"
         >
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-2 flex-shrink flex-grow max-w-[400px] w-full">
             <Label htmlFor="comment">Send a new comment:</Label>
             <Textarea
               classNames={{
@@ -157,15 +157,19 @@ export default function Discussion() {
               id="comment"
               onChange={(e) => setInputState(e.target.value)}
               value={inputState}
-              className="w-[400px]"
+              className="w-full"
               placeholder="Write a comment..."
             />
           </div>
-          <Button color="primary" type="submit">
+          <Button
+            color="primary"
+            type="submit"
+            className="flex-shrink-0 flex-grow-0"
+          >
             Send Comment
           </Button>
         </form>
-        <p className="text-lg">Comments:</p>
+        <p className="text-lg font-semibold">Comments:</p>
         <div className="flex flex-col gap-y-2">
           {discussion?.comments
             .sort(

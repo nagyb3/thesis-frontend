@@ -27,13 +27,13 @@ export default function LearningPath() {
   }, [topicId]);
 
   return (
-    <div className="min-h-[calc(100vh-50px)] bg-background flex flex-col items-center py-8 gap-y-4">
+    <div className="min-h-[calc(100vh-50px)] bg-background flex flex-col items-center py-8 gap-y-4 p-4  ">
       <BackButtonWithLink backLink={"/topic/" + topicId} />
       <Card
         classNames={{
           base: "border-black/20 border",
         }}
-        className="py-4 px-8 w-[900px] flex flex-col gap-y-4"
+        className="py-4 px-8 w-[min(100%,900px)] flex flex-col gap-y-4"
       >
         <div className="flex flex-col gap-y-2">
           <div className="flex justify-between">

@@ -36,7 +36,7 @@ export default function MyProfile() {
         classNames={{
           base: "border-black/20 border",
         }}
-        className="w-[900px] px-8 py-8 flex flex-col gap-y-2"
+        className="w-[min(100%,900px)] px-8 py-8 flex flex-col gap-y-2"
       >
         <div className="flex gap-x-4 items-end">
           <div className="bg-black p-2 rounded-full w-fit h-fit">
@@ -50,7 +50,7 @@ export default function MyProfile() {
           </div>
         </div>
         <Divider className="my-4" />
-        <UserProfileAchievements />
+        <UserProfileAchievements userProfile={profile} />
         <Divider className="my-4" />
         <UserProfileTrackedTime userId={profile?.id} isMyProfile={true} />
         <Divider className="my-4" />
