@@ -11,11 +11,13 @@ import UserProfile from "./components/views/UserProfile";
 import YourProfile from "./components/views/YourProfile";
 import PrivateMessage from "./components/views/PrivateMessage";
 import VideoChat from "./components/views/VideoChat";
+import CreateLearningPath from "./components/views/CreateLearningPath";
+import LearningPath from "./components/views/LearningPath";
 
 export default function App() {
   return (
     <AuthContextProvider>
-      <div className="h-[100vh]">
+      <main className="h-[100vh]">
         <Navbar />
         <Router>
           <Routes>
@@ -31,6 +33,14 @@ export default function App() {
               path="/topic/:topicId/discussion/:discussionId"
               element={<Discussion />}
             />
+            <Route
+              path="/topic/:topicId/create-learning-path"
+              element={<CreateLearningPath />}
+            />
+            <Route
+              path="/topic/:topicId/learning-path/:learningPathId"
+              element={<LearningPath />}
+            />
             <Route path="user/:userId" element={<UserProfile />} />
             <Route
               path="user/:userId/private-message/:privateMessageRoomId"
@@ -43,7 +53,7 @@ export default function App() {
             <Route path="/your-profile" element={<YourProfile />} />
           </Routes>
         </Router>
-      </div>
+      </main>
     </AuthContextProvider>
   );
 }

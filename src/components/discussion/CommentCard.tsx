@@ -1,15 +1,20 @@
 import { CommentType } from "@/types/CommentType";
-import { Card } from "../ui/card";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { Button } from "../ui/button";
 import { Ellipsis } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { TopicType } from "@/types/TopicType";
 import DeleteCommentDialog from "../dialogs/DeleteCommentDialog";
+import {
+  Button,
+  Card,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  useDisclosure,
+} from "@nextui-org/react";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -30,10 +35,17 @@ export default function CommentCard({
     [comment, profile]
   );
 
-  console.log({ topic });
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
 
   return (
-    <Card className="flex flex-col gap-y-2 px-4 p-4">
+    <Card
+      classNames={{
+        base: "border-black/20 border",
+      }}
+      className="flex flex-col gap-y-2 px-4 p-4"
+    >
       <div className="flex justify-between h-[40px] items-center">
         <p className="font-semibold">
           <a
@@ -55,22 +67,49 @@ export default function CommentCard({
                 .format("YYYY-MM-DD HH:mm:ss")}
           </p>
           {allowDeleteComment && (
-            <Popover>
+            <Popover
+              showArrow={true}
+              placement="bottom"
+              isOpen={isPopoverOpen}
+              onOpenChange={() => setIsPopoverOpen((prev) => !prev)}
+            >
               <PopoverTrigger>
-                <Button variant="outline" className="p-0 w-[40px]">
+                <Button isIconOnly variant="bordered" className="p-0 w-[40px]">
                   <Ellipsis />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="h-fit">
-                <DeleteCommentDialog comment={comment}>
-                  <Button variant="destructive">Delete comment</Button>
-                </DeleteCommentDialog>
+              <PopoverContent className="h-fit p-2">
+                <Button
+                  onPress={() => {
+                    setIsPopoverOpen((prev) => !prev);
+                    onOpen();
+                  }}
+                  color="danger"
+                >
+                  Delete comment
+                </Button>
               </PopoverContent>
             </Popover>
           )}
         </div>
       </div>
-      <p>{comment?.content}</p>
+      <div>
+        {comment?.content && (
+          <p>
+            {comment?.content.split("\n").map((line, index) => (
+              <span key={index}>
+                {line}
+                <br />
+              </span>
+            ))}
+          </p>
+        )}
+      </div>
+      <DeleteCommentDialog
+        comment={comment}
+        onOpenChange={onOpenChange}
+        isOpen={isOpen}
+      />
     </Card>
   );
 }

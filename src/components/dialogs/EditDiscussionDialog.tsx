@@ -1,25 +1,22 @@
-import { ReactNode, useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { Label } from "@radix-ui/react-label";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
+import { useEffect, useState } from "react";
 import { DiscussionType } from "@/types/DiscussionType";
 import { editDiscussion } from "@/api-client/modules/discussionApiClient";
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  Textarea,
+  useDisclosure,
+} from "@nextui-org/react";
+import { Pencil } from "lucide-react";
 
 export default function EditDiscussionDialog({
   discussion,
-  children,
 }: {
   discussion: DiscussionType | undefined;
-  children: ReactNode;
 }) {
   const [discussionTitle, setDiscussionTitle] = useState(
     discussion?.title ?? ""
@@ -45,47 +42,62 @@ export default function EditDiscussionDialog({
     }
   };
 
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   return (
-    <Dialog>
-      <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Edit Discussion</DialogTitle>
-          <DialogDescription>
-            You are the author of this discussion. You can edit the title and
-            the content of the discussion.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex flex-col gap-y-2">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="title" className="text-right">
-              Title
-            </Label>
+    <>
+      <Button
+        isIconOnly
+        onPress={onOpen}
+        variant="bordered"
+        className="ml-4 px-0 w-[42px] h-[42px]"
+      >
+        <Pencil />
+      </Button>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          <ModalHeader className="flex flex-col gap-y-2">
+            <p>Edit Discussion</p>
+            <p className="text-sm text-default-500 font-normal">
+              You are the author of this discussion. You can edit the title and
+              the content of the discussion.
+            </p>
+          </ModalHeader>
+          <ModalBody className="flex flex-col gap-y-4">
             <Input
+              classNames={{
+                inputWrapper: "border-black/40 border",
+              }}
+              variant="bordered"
+              label="Title"
               autoComplete="off"
               value={discussionTitle}
               onChange={(e) => setDiscussionTitle(e.target.value)}
               id="title"
               className="col-span-3"
             />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="content" className="text-right">
-              Content
-            </Label>
+
             <Textarea
+              classNames={{
+                inputWrapper: "border-black/40 border",
+              }}
+              variant="bordered"
+              label="Content"
               autoComplete="off"
               value={discussionContent}
-              onChange={(e) => setDiscussionContent(e.target.value)}
+              onValueChange={setDiscussionContent}
               id="content"
               className="col-span-3"
             />
-          </div>
-          <div className="flex justify-between">
-            <Button onClick={() => handleEditDiscussion()}>Submit</Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+
+            <div className="flex justify-end">
+              <Button color="primary" onClick={() => handleEditDiscussion()}>
+                Submit
+              </Button>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }

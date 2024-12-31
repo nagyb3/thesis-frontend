@@ -1,8 +1,7 @@
 import { House, LogOut, User, UserRoundPen } from "lucide-react";
-import { Popover, PopoverContent } from "./ui/popover";
-import { PopoverTrigger } from "@radix-ui/react-popover";
 import { logoutFromAccount } from "@/api-client/modules/authApiClient";
 import { useAuthContext } from "@/contexts/AuthContext";
+import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
 
 export default function Navbar() {
   const handleLogout = async () => {
@@ -20,34 +19,34 @@ export default function Navbar() {
   const { profile } = useAuthContext();
 
   return (
-    <div className="bg-neutral-300 h-[50px] px-12 flex justify-between items-center">
+    <div className="bg-primary h-[50px] px-12 flex justify-between items-center">
       {!isCurrentPathAuthRoute && (
         <>
           <a href="/" className="cursor-pointer">
-            <House />
+            <House color="white" />
           </a>
 
           <Popover>
             <PopoverTrigger className="h-fit">
-              <div className="bg-primary p-2 rounded-full">
-                <User color="white" />
+              <div className="bg-white p-2 rounded-full cursor-pointer">
+                <User color="black" />
               </div>
             </PopoverTrigger>
-            <PopoverContent className="w-fit mr-12 flex flex-col gap-y-4">
-              <p className="font-bold">@{profile?.username}</p>
+            <PopoverContent className="flex flex-col gap-y-4 p-4">
+              <p className="font-bold text-lg">@{profile?.username}</p>
 
               <div
                 onClick={() => (window.location.href = "/your-profile")}
-                className="flex gap-x-2 items-center cursor-pointer justify-between"
+                className="flex gap-x-2 items-center cursor-pointer justify-between w-full"
               >
-                <p>Your profile</p>
+                <p className="font-semibold">Your profile</p>
                 <UserRoundPen />
               </div>
               <button
                 onClick={() => handleLogout()}
-                className="flex gap-x-2 items-center cursor-pointer justify-between"
+                className="flex gap-x-2 items-center cursor-pointer justify-between w-full"
               >
-                <p className="text-red-500">Logout</p>
+                <p className="text-red-500 font-semibold">Logout</p>
                 <LogOut color="red" />
               </button>
             </PopoverContent>

@@ -1,4 +1,5 @@
 import { DiscussionType } from "./DiscussionType";
+import { LearningPathType } from "./LearningPathType";
 import { UserType } from "./UserType";
 
 export type TopicType = {
@@ -9,4 +10,5 @@ export type TopicType = {
   moderators: UserType[];
   discussions: DiscussionType[];
   learningResources: string[];
+  learningPaths: LearningPathType[];
 };

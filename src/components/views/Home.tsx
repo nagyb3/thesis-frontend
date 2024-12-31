@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { Card } from "../ui/card";
 import { AddTopicDialog } from "../dialogs/AddTopicDialog";
 import { TopicType } from "@/types/TopicType";
 import { getTopics } from "@/api-client/modules/topicApiClient";
-import { Input } from "../ui/input";
+import { Card, Input, Link } from "@nextui-org/react";
 
 export default function Home() {
   const [allTopics, setAllTopics] = useState([]);
@@ -30,7 +29,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-50px)] bg-neutral-50 flex flex-col items-center pb-8 px-8">
+    <div className="min-h-[calc(100vh-50px)] bg-background flex flex-col items-center pb-8 px-8">
       <div className="flex flex-col max-w-[1100px] w-full">
         <div className="flex flex-col gap-y-2 m-8">
           <p className="text-4xl font-bold">Topics</p>
@@ -44,6 +43,10 @@ export default function Home() {
           </AddTopicDialog>
         </div>
         <Input
+          classNames={{
+            inputWrapper: "border-black/40 border",
+          }}
+          variant="bordered"
           className="w-[400px] text-sm mb-8"
           placeholder="Search for name of topic..."
           onChange={handleTopicSearchInputChange}
@@ -51,16 +54,19 @@ export default function Home() {
         {allTopics.length > 0 ? (
           <div className="grid grid-cols-2 gap-4">
             {allTopics.map((topic: TopicType) => (
-              <Card
-                onClick={() => (window.location.href = `/topic/${topic?.id}`)}
-                className="p-4 cursor-pointer"
-                key={topic?.id}
-              >
-                <p className="text-lg">{topic?.name}</p>
-                <p className="text-sm text-gray-500 truncate">
-                  {topic?.description}
-                </p>
-              </Card>
+              <Link href={`/topic/${topic?.id}`} key={topic?.id}>
+                <Card
+                  classNames={{
+                    base: "border-black/20 border",
+                  }}
+                  className="p-4 cursor-pointer w-full h-full"
+                >
+                  <p className="text-lg">{topic?.name}</p>
+                  <p className="text-sm text-gray-500 truncate">
+                    {topic?.description}
+                  </p>
+                </Card>
+              </Link>
             ))}
           </div>
         ) : (

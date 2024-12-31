@@ -5,20 +5,17 @@ import {
 import { DiscussionType } from "@/types/DiscussionType";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Card } from "../ui/card";
 import DiscussionFeedback from "../discussion/DiscussionFeedback";
 import CommentCard from "../discussion/CommentCard";
 import { CommentType } from "@/types/CommentType";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import { Label } from "@radix-ui/react-label";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { Pencil, Trash } from "lucide-react";
 import { createComment } from "@/api-client/modules/commentApiClient";
 import DeleteDiscussionDialog from "../dialogs/DeleteDiscussionDialog";
 import EditDiscussionDialog from "../dialogs/EditDiscussionDialog";
 import { TopicType } from "@/types/TopicType";
 import BackButtonWithLink from "../BackButtonWithLink";
+import { Button, Card, Textarea } from "@nextui-org/react";
 
 export default function Discussion() {
   const { discussionId, topicId } = useParams();
@@ -78,9 +75,14 @@ export default function Discussion() {
     discussion?.author?.id === profile?.id;
 
   return (
-    <div className="min-h-[calc(100vh-50px)] bg-neutral-50 flex flex-col items-center py-8 gap-y-4">
+    <div className="min-h-[calc(100vh-50px)] bg-background flex flex-col items-center py-8 gap-y-4 p-4">
       <BackButtonWithLink backLink={"/topic/" + topicId} />
-      <Card className="py-4 px-8 w-[900px]">
+      <Card
+        classNames={{
+          base: "border-black/20 border",
+        }}
+        className="py-4 px-8 w-[min(100%,900px)]"
+      >
         <div className="flex gap-x-2 items-center justify-between">
           <p className="font-semibold text-xl">{discussion?.title}</p>
           <div className="flex">
@@ -90,28 +92,14 @@ export default function Discussion() {
             />
             {isCurrentUserAuthorOfDiscussion && (
               <>
-                <EditDiscussionDialog discussion={discussion}>
-                  <Button
-                    variant="outline"
-                    className="ml-4 px-0 w-[42px] h-[42px]"
-                  >
-                    <Pencil />
-                  </Button>
-                </EditDiscussionDialog>
-                <DeleteDiscussionDialog discussion={discussion}>
-                  <Button
-                    variant="destructive"
-                    className="ml-2 px-0 w-[42px] h-[42px]"
-                  >
-                    <Trash />
-                  </Button>
-                </DeleteDiscussionDialog>
+                <EditDiscussionDialog discussion={discussion} />
+                <DeleteDiscussionDialog discussion={discussion} />
               </>
             )}
           </div>
         </div>
-        <p className="pb-4 ml-8">
-          Author:{" "}
+        <p className="pb-4">
+          Created by:{" "}
           <a
             href={
               discussion?.author?.id === profile?.id
@@ -123,7 +111,18 @@ export default function Discussion() {
             @{discussion?.author?.username}
           </a>
         </p>
-        <p>{discussion?.content}</p>
+        <div>
+          {discussion?.content && (
+            <p>
+              {discussion?.content.split("\n").map((line, index) => (
+                <span key={index}>
+                  {line}
+                  <br />
+                </span>
+              ))}
+            </p>
+          )}
+        </div>
         {discussion?.image && (
           <div className="flex justify-center">
             <img
@@ -134,7 +133,12 @@ export default function Discussion() {
           </div>
         )}
       </Card>
-      <Card className="py-4 px-8 w-[900px] flex flex-col gap-y-4">
+      <Card
+        classNames={{
+          base: "border-black/20 border",
+        }}
+        className="py-4 px-8 w-[min(100%,900px)] flex flex-col gap-y-4"
+      >
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -142,20 +146,30 @@ export default function Discussion() {
           }}
           className="py-4 flex gap-x-4 items-end"
         >
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-2 flex-shrink flex-grow max-w-[400px] w-full">
             <Label htmlFor="comment">Send a new comment:</Label>
-            <Input
-              required
+            <Textarea
+              classNames={{
+                inputWrapper: "border-black/40 border",
+              }}
+              isRequired
+              variant="bordered"
               id="comment"
               onChange={(e) => setInputState(e.target.value)}
               value={inputState}
-              className="p-2 border border-gray-300 rounded w-[300px]"
+              className="w-full"
               placeholder="Write a comment..."
             />
           </div>
-          <Button type="submit">Send</Button>
+          <Button
+            color="primary"
+            type="submit"
+            className="flex-shrink-0 flex-grow-0"
+          >
+            Send Comment
+          </Button>
         </form>
-        <p className="text-lg">Comments:</p>
+        <p className="text-lg font-semibold">Comments:</p>
         <div className="flex flex-col gap-y-2">
           {discussion?.comments
             .sort(
