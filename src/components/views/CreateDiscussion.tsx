@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import { createDiscussion } from "@/api-client/modules/discussionApiClient";
-import { ImageUp, Trash2 } from "lucide-react";
+import { FileVideo2, ImageUp, Trash2 } from "lucide-react";
 import BackButtonWithLink from "../BackButtonWithLink";
 import { Button, Input, Textarea } from "@nextui-org/react";
 
@@ -9,7 +9,8 @@ export default function CreateDiscussion() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const [file, setFile] = useState<File | undefined>(undefined);
+  const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+  const [videoFile, setVideoFile] = useState<File | undefined>(undefined);
 
   const { topicId } = useParams();
 
@@ -27,14 +28,17 @@ export default function CreateDiscussion() {
     });
   };
 
-  const handleCreate = async () => {
-    const base64Image = file ? await fileToBase64(file) : undefined;
+  const handleCreate = async (e: FormEvent) => {
+    e.preventDefault();
+    const base64Image = imageFile ? await fileToBase64(imageFile) : undefined;
+    const base64Video = videoFile ? await fileToBase64(videoFile) : undefined;
 
     const result = await createDiscussion({
       title,
       content,
       topicId: topicId ?? "",
       image: base64Image,
+      video: base64Video,
     });
 
     if (result.status === 201) {
@@ -50,11 +54,11 @@ export default function CreateDiscussion() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
+      setImageFile(e.target.files[0]);
     }
   };
 
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+  const handleImageDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
     const droppedFiles = event.dataTransfer.files;
@@ -66,7 +70,26 @@ export default function CreateDiscussion() {
       if (!validImageTypes.includes(firstDroppedFile.type)) {
         alert("Invalid file type. Please upload a PNG, JPEG or JPG file.");
       } else {
-        setFile(firstDroppedFile);
+        setImageFile(firstDroppedFile);
+      }
+    }
+  };
+
+  const handleVideoDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const droppedFiles = event.dataTransfer.files;
+    if (droppedFiles.length > 0) {
+      const firstDroppedFile = Array.from(droppedFiles)[0];
+
+      console.log({ droppedFileType: firstDroppedFile.type });
+
+      const validImageTypes = ["video/mp4"];
+
+      if (!validImageTypes.includes(firstDroppedFile.type)) {
+        alert("Invalid file type. Please upload a PNG, JPEG or JPG file.");
+      } else {
+        setVideoFile(firstDroppedFile);
       }
     }
   };
@@ -75,7 +98,10 @@ export default function CreateDiscussion() {
     <div className="min-h-[calc(100vh-50px)] bg-background flex flex-col items-center gap-y-4 py-8">
       <BackButtonWithLink backLink={"/topic/" + topicId} />
       <p className="font-semibold text-xl">Create New Discussion:</p>
-      <div className="flex flex-col items-center max-w-[532px] px-4 w-full gap-y-6">
+      <form
+        className="flex flex-col items-center max-w-[532px] px-4 w-full gap-y-6"
+        onSubmit={(e) => handleCreate(e)}
+      >
         <div className="flex flex-col gap-y-2 w-full">
           <Input
             classNames={{
@@ -102,30 +128,33 @@ export default function CreateDiscussion() {
             id="content"
           />
         </div>
-        {file ? (
+        {imageFile ? (
           <div className="relative">
-            <img src={URL.createObjectURL(file)} alt="" />
+            <img src={URL.createObjectURL(imageFile)} alt="" />
             <Button
               color="danger"
               className="rounded-full absolute right-[-10px] top-[-10px] p-2 hover:bg-[rgb(243, 18, 96)]"
-              onClick={() => setFile(undefined)}
+              onPress={() => setImageFile(undefined)}
             >
               <Trash2 />
             </Button>
           </div>
         ) : (
           <div
-            onDrop={(e) => handleDrop(e)}
+            onDrop={(e) => handleImageDrop(e)}
             onDragOver={(e) => e.preventDefault()}
             onClick={() => handleUploadClick()}
             className="cursor-pointer bg-default-100 h-[200px] w-full rounded border border-dashed border-default-400 flex justify-center items-center"
           >
             <div className="flex flex-col gap-y-2 items-center">
               <p className="text-default-500 text-base">
-                Upload an image for the discussions!
+                Upload an Image for the discussions!
               </p>
               <ImageUp color="gray" />
               <p className="text-default-500 text-sm">(Max file size: 50mb)</p>
+              <p className="text-default-500 text-sm">
+                Supported file types: png, jpeg, jpg
+              </p>
             </div>
             <input
               onChange={(e) => handleInputChange(e)}
@@ -135,14 +164,46 @@ export default function CreateDiscussion() {
             />
           </div>
         )}
-        <Button
-          color="primary"
-          onChange={() => {}}
-          onClick={() => handleCreate()}
-        >
+        {videoFile ? (
+          <div className="relative">
+            <video src={URL.createObjectURL(videoFile)} controls />
+            <Button
+              color="danger"
+              className="rounded-full absolute right-[-10px] top-[-10px] p-2 hover:bg-[rgb(243, 18, 96)]"
+              onPress={() => setVideoFile(undefined)}
+            >
+              <Trash2 />
+            </Button>
+          </div>
+        ) : (
+          <div
+            onDrop={(e) => handleVideoDrop(e)}
+            onDragOver={(e) => e.preventDefault()}
+            onClick={() => handleUploadClick()}
+            className="cursor-pointer bg-default-100 h-[200px] w-full rounded border border-dashed border-default-400 flex justify-center items-center"
+          >
+            <div className="flex flex-col gap-y-2 items-center">
+              <p className="text-default-500 text-base">
+                Upload a Video for the discussion!
+              </p>
+              <FileVideo2 color="gray" />
+              <p className="text-default-500 text-sm">(Max file size: 50mb)</p>
+              <p className="text-default-500 text-sm">
+                Supported file types: mp4
+              </p>
+            </div>
+            <input
+              onChange={(e) => handleInputChange(e)}
+              type="file"
+              className="hidden"
+              id="file-upload"
+            />
+          </div>
+        )}
+        <Button color="primary" onChange={() => {}} type="submit">
           Submit Discussion
         </Button>
-      </div>
+      </form>
     </div>
   );
 }

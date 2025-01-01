@@ -132,6 +132,16 @@ export default function Discussion() {
             />
           </div>
         )}
+        {discussion?.video && (
+          <div className="flex justify-center">
+            <video
+              src={discussion.video}
+              className="max-h-[300px] max-w-full self-center"
+              controls
+              muted
+            ></video>
+          </div>
+        )}
       </Card>
       <Card
         classNames={{

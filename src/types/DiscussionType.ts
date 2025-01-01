@@ -13,4 +13,5 @@ export type DiscussionType = {
   comments: CommentType[];
   discussionFeedback: DiscussionFeedbackType[];
   image?: string;
+  video?: string;
 };

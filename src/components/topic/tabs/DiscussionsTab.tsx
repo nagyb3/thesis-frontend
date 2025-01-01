@@ -68,41 +68,53 @@ export default function DiscussionsTab({
           onChange={(e) => fetchDiscussions(e)}
         />
         {discussions && discussions.length > 0 ? (
-          discussions?.map((discussion: DiscussionType) => (
-            <Link
-              key={discussion.id}
-              href={"/topic/" + topic?.id + "/discussion/" + discussion.id}
-            >
-              <Card
-                classNames={{
-                  base: "border-black/20 border",
-                }}
-                className="p-4 cursor-pointer flex flex-col items-center w-full"
+          discussions
+            ?.sort((a, b) => {
+              const aTime = new Date(a.created_at).getTime();
+              const bTime = new Date(b.created_at).getTime();
+              return bTime - aTime;
+            })
+            ?.map((discussion: DiscussionType) => (
+              <Link
+                key={discussion.id}
+                href={"/topic/" + topic?.id + "/discussion/" + discussion.id}
               >
-                <div className="flex justify-between w-full">
-                  <p className="self-start text-xl font-semibold">
-                    {discussion.title}
-                  </p>
-
-                  {discussion?.author?.username && (
-                    <p>
-                      Created by: @
-                      <span className="font-bold hover:underline">
-                        {discussion?.author?.username}
-                      </span>
+                <Card
+                  classNames={{
+                    base: "border-black/20 border",
+                  }}
+                  className="p-4 cursor-pointer flex flex-col items-center w-full"
+                >
+                  <div className="flex justify-between w-full">
+                    <p className="self-start text-xl font-semibold">
+                      {discussion.title}
                     </p>
-                  )}
-                </div>
-                {discussion?.image && (
-                  <img
-                    src={discussion?.image}
-                    alt=""
-                    className="h-[200px] max-w-full"
-                  />
-                )}
-              </Card>
-            </Link>
-          ))
+
+                    {discussion?.author?.username && (
+                      <p>
+                        Created by: @
+                        <span className="font-bold hover:underline">
+                          {discussion?.author?.username}
+                        </span>
+                      </p>
+                    )}
+                  </div>
+
+                  {discussion?.video ? (
+                    <video
+                      src={discussion?.video}
+                      className="h-[200px] max-w-full"
+                    />
+                  ) : discussion?.image ? (
+                    <img
+                      src={discussion?.image}
+                      alt=""
+                      className="h-[200px] max-w-full"
+                    />
+                  ) : null}
+                </Card>
+              </Link>
+            ))
         ) : (
           <p className="text-gray-500 text-center">
             No discussions are created for this topic yet...

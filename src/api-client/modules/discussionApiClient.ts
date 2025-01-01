@@ -6,11 +6,13 @@ export const createDiscussion = async ({
   content,
   topicId,
   image,
+  video,
 }: {
   title: string;
   content: string;
   topicId: string;
   image?: string;
+  video?: string;
 }) => {
   return await apiClient.post<DiscussionType>(
     `/topics/${topicId}/discussions`,
@@ -19,6 +21,7 @@ export const createDiscussion = async ({
       content,
       topicId,
       image,
+      video,
     }
   );
 };
