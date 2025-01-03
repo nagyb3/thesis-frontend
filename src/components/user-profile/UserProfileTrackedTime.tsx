@@ -43,9 +43,11 @@ const chartConfig = {
 export default function UserProfileTrackedTime({
   userId,
   isMyProfile,
+  onTrackedTimeDataChange,
 }: {
   userId: string | undefined;
   isMyProfile: boolean;
+  onTrackedTimeDataChange?: () => void;
 }) {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [minutes, setMinutes] = useState<number | undefined>(undefined);
@@ -131,6 +133,9 @@ export default function UserProfileTrackedTime({
     if (result.status === 201) {
       setMinutes(undefined);
       fetchTrackedTimes();
+      if (onTrackedTimeDataChange) {
+        onTrackedTimeDataChange();
+      }
     }
   };
 
@@ -163,6 +168,9 @@ export default function UserProfileTrackedTime({
     if (result.status === 200) {
       setIsEditingDailyGoal(false);
       fetchProfile();
+      if (onTrackedTimeDataChange) {
+        onTrackedTimeDataChange();
+      }
     }
   };
 
@@ -325,7 +333,7 @@ export default function UserProfileTrackedTime({
                   <Button
                     isIconOnly
                     variant="light"
-                    onClick={() => setIsEditingDailyGoal((prev) => !prev)}
+                    onPress={() => setIsEditingDailyGoal((prev) => !prev)}
                   >
                     <Pencil />
                   </Button>
@@ -359,7 +367,7 @@ export default function UserProfileTrackedTime({
                   </Button>
                   <Button
                     variant="bordered"
-                    onClick={() => {
+                    onPress={() => {
                       setIsEditingDailyGoal((prev) => !prev);
                       setNewDailyGoalState(
                         profile?.trackedMinutesDailyGoal ?? 30

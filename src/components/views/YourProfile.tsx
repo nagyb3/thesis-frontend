@@ -6,6 +6,7 @@ import { getUserById } from "@/api-client/modules/userApiClient";
 import UserProfileRating from "../user-profile/UserProfileRating";
 import UserProfileTrackedTime from "../user-profile/UserProfileTrackedTime";
 import { Card, Divider } from "@nextui-org/react";
+import { UserType } from "@/types/UserType";
 
 export default function MyProfile() {
   const { profile } = useAuthContext();
@@ -16,18 +17,20 @@ export default function MyProfile() {
   const [numberOfRatings, setNumberOfRatings] = useState<number | undefined>(
     undefined
   );
+  const [userProfile, setUserProfile] = useState<UserType | undefined>(
+    undefined
+  );
+
+  const fetchUserProfile = async () => {
+    const result = await getUserById(profile?.id ?? "");
+
+    setAverageRating(result.data.rating);
+    setNumberOfRatings(result.data.numberOfRatings);
+    setUserProfile(result.data.user);
+  };
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      const result = await getUserById(profile?.id ?? "");
-
-      setAverageRating(result.data.rating);
-      setNumberOfRatings(result.data.numberOfRatings);
-
-      console.log(result);
-    };
-
-    fetchProfile();
+    fetchUserProfile();
   }, [profile?.id]);
 
   return (
@@ -50,9 +53,13 @@ export default function MyProfile() {
           </div>
         </div>
         <Divider className="my-4" />
-        <UserProfileAchievements userProfile={profile} />
+        <UserProfileAchievements userProfile={userProfile} />
         <Divider className="my-4" />
-        <UserProfileTrackedTime userId={profile?.id} isMyProfile={true} />
+        <UserProfileTrackedTime
+          userId={profile?.id}
+          isMyProfile={true}
+          onTrackedTimeDataChange={() => fetchUserProfile()}
+        />
         <Divider className="my-4" />
         <UserProfileRating
           isYourProfile={true}
