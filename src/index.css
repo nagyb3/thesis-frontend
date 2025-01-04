@@ -79,3 +79,11 @@
   stroke: #000;
   stroke-width: 1px;
 }
+
+.learning-resource-item a {
+  color: blue;
+}
+
+.learning-resource-item a:hover {
+  text-decoration: underline;
+}

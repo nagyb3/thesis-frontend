@@ -11,6 +11,7 @@ import {
 import { Check, CircleX } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Linkify from "react-linkify";
 
 export default function LearningResourcesTab({
   isCurrentUserModeratorOfTopic,
@@ -130,10 +131,12 @@ export default function LearningResourcesTab({
             </ul>
           </form>
         ) : (
-          <ul className="list-disc list-inside">
-            {learningResources?.map((resource, index) => (
-              <li key={index}>{resource}</li>
-            ))}
+          <ul className="list-disc list-inside learning-resource-item">
+            <Linkify>
+              {learningResources?.map((resource, index) => (
+                <li key={index}>{resource}</li>
+              ))}
+            </Linkify>
           </ul>
         )}
       </CardBody>
