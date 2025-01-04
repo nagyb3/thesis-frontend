@@ -1,13 +1,24 @@
+import { TimeRangeType } from "@/components/user-profile/UserProfileTrackedTime";
+
 export const fillTrackedTimeDataWithZeroMinutes = (
-  array: { date: string; minutes: number }[]
+  array: { date: string; minutes: number }[],
+  selectedTimeRange: TimeRangeType
 ) => {
   if (array.length === 0) {
     return array;
   }
   array.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  const startDate = new Date(array[0].date);
-  const endDate = new Date(array[array.length - 1].date);
+  const startDate = new Date();
+  if (selectedTimeRange === "all-time") {
+    startDate.setTime(new Date(array[0].date).getTime());
+  } else if (selectedTimeRange === "last-7-days") {
+    startDate.setDate(startDate.getDate() - 6);
+  } else {
+    startDate.setDate(startDate.getDate() - 29);
+  }
+
+  const endDate = new Date();
 
   const dateMap = new Map(array.map((item) => [item.date, item.minutes]));
 

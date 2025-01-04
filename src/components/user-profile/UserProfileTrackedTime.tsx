@@ -30,6 +30,8 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
+  Select,
+  SelectItem,
   useDisclosure,
 } from "@nextui-org/react";
 
@@ -39,6 +41,8 @@ const chartConfig = {
     color: "#60a5fa",
   },
 } satisfies ChartConfig;
+
+export type TimeRangeType = "all-time" | "last-30-days" | "last-7-days";
 
 export default function UserProfileTrackedTime({
   userId,
@@ -103,7 +107,6 @@ export default function UserProfileTrackedTime({
           });
         }
       });
-      newData = fillTrackedTimeDataWithZeroMinutes(newData);
       setTrackedTimesData(newData);
     }
   }, [trackedTimes]);
@@ -184,6 +187,49 @@ export default function UserProfileTrackedTime({
   // state management for 'tracked times per day' modal
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  const [selectedTimeRange, setSelectedTimeRange] =
+    useState<TimeRangeType>("all-time");
+
+  const [timeDataInTimeRange, setTimeDataInTimeRange] = useState<
+    { date: string; minutes: number }[] | []
+  >([]);
+
+  useEffect(() => {
+    if (trackedTimesData) {
+      setTimeDataInTimeRange(
+        filterTrackedTimeWithTimeRange(selectedTimeRange, trackedTimesData)
+      );
+    }
+  }, [trackedTimesData, selectedTimeRange]);
+
+  const filterTrackedTimeWithTimeRange = (
+    timeRange: TimeRangeType,
+    trackedTimes: { date: string; minutes: number }[]
+  ) => {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 29);
+
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+
+    switch (timeRange) {
+      case "all-time":
+        return trackedTimes;
+      case "last-30-days":
+        return trackedTimes.filter(
+          (trackedTime) =>
+            new Date(trackedTime.date) >= thirtyDaysAgo &&
+            new Date(trackedTime.date) <= new Date()
+        );
+      case "last-7-days":
+        return trackedTimes.filter(
+          (trackedTime) =>
+            new Date(trackedTime.date) >= sevenDaysAgo &&
+            new Date(trackedTime.date) <= new Date()
+        );
+    }
+  };
+
   return (
     <div className="flex flex-col gap-y-4">
       <p className="text-2xl font-semibold">Time Tracker</p>
@@ -244,15 +290,48 @@ export default function UserProfileTrackedTime({
           </form>
         )}
         <div className="flex flex-col gap-y-2">
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-4">
             <p className="font-semibold text-lg">Statistics:</p>
-            {trackedTimesData && trackedTimesData.length > 0 ? (
+            <div className="flex gap-x-2 items-center justify-between">
+              <div className="flex gap-x-2 items-center">
+                <p>Show:</p>
+                <Select
+                  aria-label="Time range selector"
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      setSelectedTimeRange(e.target.value as TimeRangeType);
+                    }
+                  }}
+                  selectedKeys={[selectedTimeRange]}
+                  defaultSelectedKeys={["all-time"]}
+                  className="max-w-xs w-[250px]"
+                >
+                  <SelectItem key="all-time">All time</SelectItem>
+                  <SelectItem key="last-30-days">Last 30 days</SelectItem>
+                  <SelectItem key="last-7-days">Last 7 days</SelectItem>
+                </Select>
+              </div>
+              <div className="flex gap-x-2 items-center">
+                Tracked minutes in this period:{" "}
+                <span className="font-bold">
+                  {timeDataInTimeRange?.reduce((a, b) => a + b.minutes, 0)}{" "}
+                  minutes
+                </span>
+              </div>
+            </div>
+            {timeDataInTimeRange && timeDataInTimeRange.length > 0 ? (
               <>
                 <p className="text-black/70 text-sm">
                   Click on a bar to see the details for the day!
                 </p>
                 <ChartContainer config={chartConfig} className="min-h-[200px]">
-                  <BarChart accessibilityLayer data={trackedTimesData}>
+                  <BarChart
+                    accessibilityLayer
+                    data={fillTrackedTimeDataWithZeroMinutes(
+                      timeDataInTimeRange,
+                      selectedTimeRange
+                    )}
+                  >
                     <CartesianGrid vertical={true} />
                     <XAxis
                       dataKey="date"
