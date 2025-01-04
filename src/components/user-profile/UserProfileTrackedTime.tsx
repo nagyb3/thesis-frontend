@@ -129,6 +129,13 @@ export default function UserProfileTrackedTime({
   ) => {
     e.preventDefault();
     if (!date || !minutes) return;
+
+    // check if this date is after today
+    if (new Date(date) > new Date()) {
+      alert("You can't submit a tracked time for a future date!");
+      return;
+    }
+
     const result = await createTrackedTime({
       date,
       minutes,
