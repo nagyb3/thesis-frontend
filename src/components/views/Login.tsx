@@ -24,7 +24,8 @@ export default function Login() {
       }
     } catch (error) {
       setErrorState(
-        (error as AxiosError<{ message: string }>)?.response?.data?.message
+        (error as AxiosError<{ message: string }>)?.response?.data?.message ??
+          "Something went wrong!"
       );
       console.error({ error });
     }
