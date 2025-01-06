@@ -89,7 +89,7 @@ const VideoChat: React.FC = () => {
           credential: import.meta.env.VITE_TURN_SERVER_PASSWORD,
         },
       ],
-      iceTransportPolicy: "relay",
+      // iceTransportPolicy: "relay",
     });
 
     stream.getTracks().forEach((track) => {
