@@ -57,7 +57,7 @@ export default function DiscussionsTab({
           </Button>
         </div>
       </CardHeader>
-      <CardBody className="space-y-2 p-6">
+      <CardBody className="space-y-4 p-6">
         <Input
           classNames={{
             inputWrapper: "border-black/40 border",
@@ -83,7 +83,7 @@ export default function DiscussionsTab({
                   classNames={{
                     base: "border-black/20 border",
                   }}
-                  className="p-4 cursor-pointer flex flex-col items-center w-full"
+                  className="p-4 cursor-pointer flex flex-col items-center w-full shadow-md"
                 >
                   <div className="flex justify-between w-full">
                     <p className="self-start text-xl font-semibold">
@@ -103,13 +103,13 @@ export default function DiscussionsTab({
                   {discussion?.video ? (
                     <video
                       src={discussion?.video}
-                      className="h-[200px] max-w-full"
+                      className="h-[200px] max-w-full mt-8"
                     />
                   ) : discussion?.image ? (
                     <img
                       src={discussion?.image}
                       alt=""
-                      className="h-[200px] max-w-full"
+                      className="h-[200px] max-w-full mt-8"
                     />
                   ) : null}
                 </Card>

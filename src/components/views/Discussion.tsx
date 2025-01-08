@@ -113,7 +113,7 @@ export default function Discussion() {
         </p>
         <div>
           {discussion?.content && (
-            <p>
+            <p className="mt-2">
               {discussion?.content.split("\n").map((line, index) => (
                 <span key={index}>
                   {line}
@@ -127,7 +127,7 @@ export default function Discussion() {
           <div className="flex justify-center">
             <img
               src={discussion.image}
-              className="max-h-[300px] max-w-full self-center"
+              className="max-h-[300px] max-w-full self-center mt-8"
               alt="image for the discussion"
             />
           </div>
@@ -136,7 +136,7 @@ export default function Discussion() {
           <div className="flex justify-center">
             <video
               src={discussion.video}
-              className="max-h-[300px] max-w-full self-center"
+              className="max-h-[300px] max-w-full self-center mt-8"
               controls
               muted
             ></video>

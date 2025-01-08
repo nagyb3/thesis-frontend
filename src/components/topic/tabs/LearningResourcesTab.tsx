@@ -131,7 +131,7 @@ export default function LearningResourcesTab({
             </ul>
           </form>
         ) : (
-          <ul className="list-disc list-inside learning-resource-item">
+          <ul className="list-disc list-inside learning-resource-item flex flex-col gap-y-2 ">
             <Linkify>
               {learningResources?.map((resource, index) => (
                 <li key={index}>{resource}</li>
