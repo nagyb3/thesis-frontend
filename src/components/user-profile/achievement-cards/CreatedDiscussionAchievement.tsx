@@ -1,4 +1,5 @@
 import { UserType } from "@/types/UserType";
+import AchievementTooltip from "./AchievementTooltip";
 
 export default function CreatedDicussionAchievement({
   userProfile,
@@ -6,21 +7,23 @@ export default function CreatedDicussionAchievement({
   userProfile: UserType | undefined;
 }) {
   const isAchieved =
-    userProfile?.discussions && userProfile?.discussions?.length > 0;
+    (userProfile?.discussions && userProfile?.discussions?.length > 0) ?? false;
 
   return (
-    <div
-      className={`${
-        isAchieved ? "bg-success/5" : "bg-danger/5"
-      } h-48 rounded-lg p-4 flex flex-col gap-y-2 items-center justify-center`}
-    >
-      <p
+    <AchievementTooltip isAchieved={isAchieved}>
+      <div
         className={`${
-          isAchieved ? "text-success" : "text-danger"
-        } text-center font-semibold`}
+          isAchieved ? "bg-success/5" : "bg-danger/5"
+        } h-48 rounded-lg p-4 flex flex-col gap-y-2 items-center justify-center`}
       >
-        Create a new discussion
-      </p>
-    </div>
+        <p
+          className={`${
+            isAchieved ? "text-success" : "text-danger"
+          } text-center font-semibold`}
+        >
+          Create a new discussion
+        </p>
+      </div>
+    </AchievementTooltip>
   );
 }

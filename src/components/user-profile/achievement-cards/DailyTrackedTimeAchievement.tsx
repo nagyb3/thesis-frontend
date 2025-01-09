@@ -1,4 +1,5 @@
 import { UserType } from "@/types/UserType";
+import AchievementTooltip from "./AchievementTooltip";
 
 export default function DailyTrackedTime({
   userProfile,
@@ -37,8 +38,6 @@ export default function DailyTrackedTime({
       }
     });
 
-    console.log({ newData });
-
     const numberOfDaysWhereAchieved = newData.filter(
       (trackedTime) =>
         trackedTime.minutes >= (userProfile?.trackedMinutesDailyGoal ?? 30)
@@ -50,18 +49,20 @@ export default function DailyTrackedTime({
   const isAchieved = isAchievementDone(userProfile);
 
   return (
-    <div
-      className={`${
-        isAchieved ? "bg-success/5" : "bg-danger/5"
-      } h-48 rounded-lg p-4 flex flex-col gap-y-2 items-center justify-center`}
-    >
-      <p
+    <AchievementTooltip isAchieved={isAchieved}>
+      <div
         className={`${
-          isAchieved ? "text-success" : "text-danger"
-        } text-center font-semibold`}
+          isAchieved ? "bg-success/5" : "bg-danger/5"
+        } h-48 rounded-lg p-4 flex flex-col gap-y-2 items-center justify-center`}
       >
-        Accomplish daily tracked minute goals for 3 days
-      </p>
-    </div>
+        <p
+          className={`${
+            isAchieved ? "text-success" : "text-danger"
+          } text-center font-semibold`}
+        >
+          Accomplish daily tracked minute goals for 3 days
+        </p>
+      </div>
+    </AchievementTooltip>
   );
 }
