@@ -1,9 +1,11 @@
 import { FormEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import { createDiscussion } from "@/api-client/modules/discussionApiClient";
-import { FileVideo2, ImageUp, Trash2 } from "lucide-react";
+import { FileVideo2, ImageUp } from "lucide-react";
 import BackButtonWithLink from "../BackButtonWithLink";
 import { Button, Input, Textarea } from "@nextui-org/react";
+import { ImagePreview } from "../create-discussion/ImagePreview";
+import { VideoPreview } from "../create-discussion/VideoPreview";
 
 export default function CreateDiscussion() {
   const [title, setTitle] = useState("");
@@ -47,14 +49,43 @@ export default function CreateDiscussion() {
     }
   };
 
-  const handleUploadClick = () => {
-    const fileUploadInput = document.getElementById("file-upload");
-    fileUploadInput?.click();
+  const handleImageInputClick = () => {
+    const imageInput = document.getElementById("image-upload");
+    imageInput?.click();
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleVideoInputClick = () => {
+    const videoInput = document.getElementById("video-upload");
+    videoInput?.click();
+  };
+
+  const handleImageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const validImageTypes = ["image/png", "image/jpeg", "image/jpg"];
+
     if (e.target.files && e.target.files.length > 0) {
-      setImageFile(e.target.files[0]);
+      const firstFile = e.target.files?.[0];
+
+      if (firstFile?.type && !validImageTypes.includes(firstFile.type)) {
+        alert("Invalid file type. Please upload a PNG, JPEG or JPG file.");
+        return;
+      } else {
+        setImageFile(e.target.files[0]);
+      }
+    }
+  };
+
+  const handleVideoInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const validVideoTypes = ["video/mp4"];
+
+    if (e.target.files && e.target.files.length > 0) {
+      const firstFile = e.target.files?.[0];
+
+      if (firstFile?.type && !validVideoTypes.includes(firstFile.type)) {
+        alert("Invalid file type. Please upload a MP4 file.");
+        return;
+      } else {
+        setVideoFile(e.target.files[0]);
+      }
     }
   };
 
@@ -82,11 +113,9 @@ export default function CreateDiscussion() {
     if (droppedFiles.length > 0) {
       const firstDroppedFile = Array.from(droppedFiles)[0];
 
-      console.log({ droppedFileType: firstDroppedFile.type });
+      const validVideoTypes = ["video/mp4"];
 
-      const validImageTypes = ["video/mp4"];
-
-      if (!validImageTypes.includes(firstDroppedFile.type)) {
+      if (!validVideoTypes.includes(firstDroppedFile.type)) {
         alert("Invalid file type. Please upload a PNG, JPEG or JPG file.");
       } else {
         setVideoFile(firstDroppedFile);
@@ -129,21 +158,15 @@ export default function CreateDiscussion() {
           />
         </div>
         {imageFile ? (
-          <div className="relative">
-            <img src={URL.createObjectURL(imageFile)} alt="" />
-            <Button
-              color="danger"
-              className="rounded-full absolute right-[-10px] top-[-10px] p-2 hover:bg-[rgb(243, 18, 96)]"
-              onPress={() => setImageFile(undefined)}
-            >
-              <Trash2 />
-            </Button>
-          </div>
+          <ImagePreview
+            imageFile={imageFile}
+            onRemove={() => setImageFile(undefined)}
+          />
         ) : (
           <div
             onDrop={(e) => handleImageDrop(e)}
             onDragOver={(e) => e.preventDefault()}
-            onClick={() => handleUploadClick()}
+            onClick={() => handleImageInputClick()}
             className="cursor-pointer bg-default-100 h-[200px] w-full rounded border border-dashed border-default-400 flex justify-center items-center"
           >
             <div className="flex flex-col gap-y-2 items-center">
@@ -157,29 +180,23 @@ export default function CreateDiscussion() {
               </p>
             </div>
             <input
-              onChange={(e) => handleInputChange(e)}
+              onChange={(e) => handleImageInputChange(e)}
               type="file"
               className="hidden"
-              id="file-upload"
+              id="image-upload"
             />
           </div>
         )}
         {videoFile ? (
-          <div className="relative">
-            <video src={URL.createObjectURL(videoFile)} controls />
-            <Button
-              color="danger"
-              className="rounded-full absolute right-[-10px] top-[-10px] p-2 hover:bg-[rgb(243, 18, 96)]"
-              onPress={() => setVideoFile(undefined)}
-            >
-              <Trash2 />
-            </Button>
-          </div>
+          <VideoPreview
+            videoFile={videoFile}
+            onRemove={() => setVideoFile(undefined)}
+          />
         ) : (
           <div
             onDrop={(e) => handleVideoDrop(e)}
             onDragOver={(e) => e.preventDefault()}
-            onClick={() => handleUploadClick()}
+            onClick={() => handleVideoInputClick()}
             className="cursor-pointer bg-default-100 h-[200px] w-full rounded border border-dashed border-default-400 flex justify-center items-center"
           >
             <div className="flex flex-col gap-y-2 items-center">
@@ -193,10 +210,10 @@ export default function CreateDiscussion() {
               </p>
             </div>
             <input
-              onChange={(e) => handleInputChange(e)}
+              onChange={(e) => handleVideoInputChange(e)}
               type="file"
               className="hidden"
-              id="file-upload"
+              id="video-upload"
             />
           </div>
         )}

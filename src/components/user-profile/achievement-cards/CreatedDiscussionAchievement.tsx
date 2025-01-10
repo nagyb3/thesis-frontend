@@ -21,7 +21,7 @@ export default function CreatedDicussionAchievement({
             isAchieved ? "text-success" : "text-danger"
           } text-center font-semibold`}
         >
-          Create a new discussion
+          Create a discussion
         </p>
       </div>
     </AchievementTooltip>
