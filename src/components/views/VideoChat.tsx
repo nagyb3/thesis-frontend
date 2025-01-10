@@ -56,12 +56,14 @@ const VideoChat: React.FC = () => {
 
   useEffect(() => {
     if (remoteStream && remoteVideoRef.current) {
+      console.log("remoteVideoRef.current.srcObject = remoteStream;");
       remoteVideoRef.current.srcObject = remoteStream;
     }
   }, [remoteStream, remoteVideoRef]);
 
   const initializeMediaDevices = async () => {
     try {
+      console.log("Attempting to initialize media devices");
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true,
@@ -77,6 +79,7 @@ const VideoChat: React.FC = () => {
   };
 
   const setupPeerConnection = (stream: MediaStream) => {
+    console.log("Setting up peer connection");
     peerConnectionRef.current = new RTCPeerConnection({
       iceServers: [
         { urls: "stun:stun.l.google.com:19302" },
@@ -86,13 +89,20 @@ const VideoChat: React.FC = () => {
           credential: import.meta.env.VITE_TURN_SERVER_PASSWORD,
         },
       ],
+      // iceTransportPolicy: "relay",
     });
 
     stream.getTracks().forEach((track) => {
+      console.log("stream.getTracks()", { track });
       peerConnectionRef.current?.addTrack(track, stream);
     });
 
     peerConnectionRef.current.ontrack = (event) => {
+      console.log(
+        "peerConnectionRef.current.ontrack",
+        { event },
+        event.streams[0]
+      );
       setRemoteStream(event.streams[0]);
       if (remoteVideoRef.current) {
         remoteVideoRef.current.srcObject = event.streams[0];
@@ -100,48 +110,82 @@ const VideoChat: React.FC = () => {
     };
 
     peerConnectionRef.current.onicecandidate = (event) => {
+      console.log("peerConnectionRef.current.onicecandidate", { event });
       if (event.candidate) {
         socketRef.current?.emit("ice-candidate", {
           candidate: event.candidate,
           roomId: videoChatRoomId,
         });
+        console.log("Sent ICE Candidate:", event.candidate, {
+          videoChatRoomId,
+          event,
+        });
+      } else {
+        console.log("All ICE candidates sent");
       }
     };
 
-    socketRef.current?.on("ice-candidate", (iceCandidate: RTCIceCandidate) => {
-      peerConnectionRef.current?.addIceCandidate(
-        new RTCIceCandidate(iceCandidate)
+    // temporarily added for debugging:
+    peerConnectionRef.current.oniceconnectionstatechange = () => {
+      console.log(
+        "ICE connection state:",
+        peerConnectionRef.current?.iceConnectionState
       );
+    };
+
+    // for temp debug:
+    peerConnectionRef.current.onconnectionstatechange = () => {
+      console.log(
+        "Connection state:",
+        peerConnectionRef.current?.connectionState
+      );
+    };
+
+    socketRef.current?.on("ice-candidate", (iceCandidate: RTCIceCandidate) => {
+      console.log("socketRef.current?.on(ice-candidate)", { iceCandidate });
+      peerConnectionRef.current
+        ?.addIceCandidate(new RTCIceCandidate(iceCandidate))
+        .catch((error) => {
+          console.error("Error adding ice candidate", error);
+        });
+      console.log("ice candidate added", { iceCandidate });
     });
 
     socketRef.current?.on("offer", async (offer: RTCSessionDescriptionInit) => {
+      console.log("socketRef.current?.on(offer)", { offer });
       await peerConnectionRef.current?.setRemoteDescription(
         new RTCSessionDescription(offer)
       );
+
       const answer = await peerConnectionRef.current?.createAnswer();
+
       await peerConnectionRef.current?.setLocalDescription(answer);
       socketRef.current?.emit("answer", { answer, roomId: videoChatRoomId });
+      console.log("Sent answer", { answer, roomId: videoChatRoomId });
     });
 
     socketRef.current?.on("answer", (answer: RTCSessionDescriptionInit) => {
+      console.log("socketRef.current?.on(answer)", { answer });
       peerConnectionRef.current?.setRemoteDescription(
         new RTCSessionDescription(answer)
       );
     });
 
     socketRef.current?.on("user-left", (userId) => {
-      setRemoteStream(null);
-
       console.log("user left with id: " + userId);
+      setRemoteStream(null);
+      // peerConnectionRef.current?.close();
     });
 
     createAndSendOffer();
   };
 
   const createAndSendOffer = async () => {
+    console.log("Creating and sending offer");
     const offer = await peerConnectionRef.current?.createOffer();
     await peerConnectionRef.current?.setLocalDescription(offer);
     socketRef.current?.emit("offer", { offer, roomId: videoChatRoomId });
+    console.log("Sent offer", { offer, roomId: videoChatRoomId });
   };
 
   const toggleMicrophone = () => {
